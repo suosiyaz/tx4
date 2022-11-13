@@ -10,7 +10,7 @@ export default function OpenWorkOrders() {
                 textAlign='center'
                 attached='top'
                 inverted
-                color='blue'
+                color='teal'
                 style={{ border: 'none' }}
             >
                 <Header>All Reconfiguration work Orders</Header>
@@ -18,7 +18,7 @@ export default function OpenWorkOrders() {
             <Segment attached>
                 <WorkOrderSearch />
             </Segment>
-            <Segment style={{ overflowX: 'scroll', maxHeight: 500, minWidth: 1000 }}>
+            <Segment style={{ overflowX: 'auto', overflowY: 'auto', minWidth: 1000 }}>
                 <WorkOrdersTable />
             </Segment>
         </>

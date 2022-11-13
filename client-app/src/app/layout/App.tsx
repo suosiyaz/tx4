@@ -44,19 +44,20 @@ function App() {
               <Grid.Column width={2}>
                 <SideMenu />
               </Grid.Column>
+              <Grid.Column width={14} style={{ marginTop: '4em' }}>
+                <Container className='mainContainer'>
+                  <Switch>
+                    <Route path='/dashboard' component={WorkOrderDashboard} />
+                    <Route path='/openOrders' component={OpenWorkOrders} />
+                    <Route path='/releaseOrder' component={WorkOrderForm} />
+                    <Route key={location.key} path={['/createWorkOrder', '/manage/:id']} component={WorkOrderForm} />
+                    <Route path='/errors' component={TestErrors} />
+                    <Route path='/server-error' component={ServerError} />
+                    <Route component={NotFound} />
+                  </Switch>
+                </Container>
+              </Grid.Column>
             </Grid>
-            <Grid.Column width={14}>
-              <Container style={{ marginTop: '4em' }}>
-                <Switch>
-                  <Route path='/dashboard' component={WorkOrderDashboard} />
-                  <Route path='/openOrders' component={OpenWorkOrders} />
-                  <Route key={location.key} path={['/createWorkOrder', '/manage/:id']} component={WorkOrderForm} />
-                  <Route path='/errors' component={TestErrors} />
-                  <Route path='/server-error' component={ServerError} />
-                  <Route component={NotFound} />
-                </Switch>
-              </Container>
-            </Grid.Column>
           </>
         )}
       />

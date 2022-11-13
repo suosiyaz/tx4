@@ -4,9 +4,10 @@ export interface WorkOrder {
     type: string;
     assembly: string;
     class: string;
-    dateReleased: Date | null;
-    startDate: Date | null;
-    completionDate: Date | null;
+    dateReleased: Date | undefined;
+    startDate: Date | undefined;
+    completionDate: Date | undefined;
+    scheduleToRelease: Date | undefined;
     orderQuantity: number;
     completedQuantity: number;
     pendingQuantity: number;
@@ -15,6 +16,9 @@ export interface WorkOrder {
     slaBreached: boolean;
     organization: string;
     aged: number;
+    parentJob: number;
+    hotOrder: boolean;
+
   }
 
   export class WorkOrder implements WorkOrder {
@@ -24,22 +28,23 @@ export interface WorkOrder {
   }
 
   export class WorkOrderFormValues {
-    id?: string = undefined;
-    job: number = 0;
+    id: string = '';
+    job: number | undefined = undefined;
     type: string = '';
     assembly: string = '';
     class: string = '';
-    dateReleased: Date | null = null;
-    startDate: Date | null = null;
-    completionDate: Date | null = null;
-    orderQuantity: number = 0;
-    completedQuantity: number = 0;
-    pendingQuantity: number = 0;
+    dateReleased: Date | undefined = undefined;
+    startDate: Date | undefined = undefined;
+    completionDate: Date | undefined = undefined;
+    scheduleToRelease: Date | undefined = undefined;
+    orderQuantity: number | undefined = undefined;
+    completedQuantity: number | undefined = undefined;
+    pendingQuantity: number | undefined = undefined;
     orderStatus: string = '';
     prodLine: string = '';
-    slaBreached: boolean = false;
     organization: string = '';
-    aged: number = 0;
+    parentJob: number | undefined = undefined;
+    hotOrder: boolean = false;
 
     constructor(workOrder?: WorkOrderFormValues) {
       if (workOrder) {
@@ -56,9 +61,10 @@ export interface WorkOrder {
         this.pendingQuantity = workOrder.pendingQuantity;
         this.orderStatus = workOrder.orderStatus;
         this.prodLine = workOrder.prodLine;
-        this.slaBreached = workOrder.slaBreached;
         this.organization = workOrder.organization;
-        this.aged = workOrder.aged;
+        this.scheduleToRelease = workOrder.scheduleToRelease;
+        this.parentJob = workOrder.parentJob;
+        this.hotOrder = workOrder.hotOrder;
       }
     }
    }

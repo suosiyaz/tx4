@@ -21,13 +21,13 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateWorkOrder(WorkOrder workOrder)
+        public async Task<IActionResult> CreateWorkOrder(WorkOrderCreateDto workOrder)
         {
             return HandleResult(await Mediator.Send(new Create.Command {WorkOrder = workOrder}));
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> EditWorkOrder(Guid id, WorkOrder workOrder)
+        public async Task<IActionResult> EditWorkOrder(Guid id, WorkOrderCreateDto workOrder)
         {
             workOrder.Id = id;
             return HandleResult(await Mediator.Send(new Edit.Command {WorkOrder = workOrder}));

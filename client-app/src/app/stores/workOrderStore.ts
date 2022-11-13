@@ -8,6 +8,7 @@ import { WorkOrder, WorkOrderFormValues } from '../models/workOrder';
 export default class WorkOrderStore {
     workOrderRegistery = new Map<string, WorkOrder>();
     selectedWorkOrder: WorkOrder | undefined = undefined;
+    workOrderToEdit: WorkOrder | undefined = undefined;
     editMode = false;
     loading = false;
     loadingInitial = false;
@@ -27,6 +28,9 @@ export default class WorkOrderStore {
 
     setPagingParams = (pagingParams: PagingParams) => {
         this.pagingParams = pagingParams;
+    }
+    setWorkOrderToEdit = (workOrder: WorkOrder) => {
+        this.workOrderToEdit = workOrder;
     }
 
     setPredicate = (predicate: string, value: string | Date) => {
@@ -127,7 +131,6 @@ export default class WorkOrderStore {
     }
 
     createWorkOrder = async (workOrder: WorkOrderFormValues) => {
-        this.loading = true;
         try {
             await agent.WorkOrders.create(workOrder);
             const newWorkOrder = new WorkOrder(workOrder);

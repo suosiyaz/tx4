@@ -19,8 +19,8 @@ body {
 .ui.vertical.menu {
     width: 13rem !important;
 }
-.fullWidthGrid {
-    width: 100% !important;
+.ui.container.mainContainer {
+    width: 95% !important;
 }
 /*home page styles*/
 

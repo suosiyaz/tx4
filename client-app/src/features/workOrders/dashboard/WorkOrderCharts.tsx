@@ -1,4 +1,4 @@
-import { format, parseISO } from 'date-fns';
+import { format, parse, parseISO, parseJSON } from 'date-fns';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
 import { Grid, Tab } from 'semantic-ui-react';
@@ -31,7 +31,7 @@ export default observer(function WorkOrdeCharts() {
         var myWorkOrdersReleasedDailyLabels: string[] = [];
         var myWorkOrdersReleasedDailyData: number[] = [];
         WorkOrdersReleasedDaily.forEach(w => {
-            myWorkOrdersReleasedDailyLabels.push(format(parseISO(w.reportLabel), 'dd MMM yyyy'));
+            myWorkOrdersReleasedDailyLabels.push(format(parseISO(w.reportLabel), 'dd MMM'));
             myWorkOrdersReleasedDailyData.push(w.quantity);
         });
         setWorkOrdersReleasedDailyLabels(myWorkOrdersReleasedDailyLabels);
@@ -40,7 +40,7 @@ export default observer(function WorkOrdeCharts() {
         var myHotWorkOrdersDailyLabels: string[] = [];
         var myHotWorkOrdersDailyData: number[] = [];
         HotWorkOrdersDaily.forEach(w => {
-            myHotWorkOrdersDailyLabels.push(format(parseISO(w.reportLabel), 'dd MMM yyyy'));
+            myHotWorkOrdersDailyLabels.push(format(parseISO(w.reportLabel), 'dd MMM'));
             myHotWorkOrdersDailyData.push(w.quantity);
         });
         setHotWorkOrdersDailyLabels(myHotWorkOrdersDailyLabels);
@@ -49,7 +49,7 @@ export default observer(function WorkOrdeCharts() {
         var myWorkOrdersCompletedLabels: string[] = [];
         var myWorkOrdersCompletedData: number[] = [];
         WorkOrdersCompleted.forEach(w => {
-            myWorkOrdersCompletedLabels.push(format(parseISO(w.reportLabel), 'dd MMM yyyy'));
+            myWorkOrdersCompletedLabels.push(format(parseISO(w.reportLabel), 'dd MMM'));
             myWorkOrdersCompletedData.push(w.quantity);
         });
         setWorkOrdersCompletedLabels(myWorkOrdersCompletedLabels);
@@ -58,7 +58,7 @@ export default observer(function WorkOrdeCharts() {
         var myWorkOrdersPastDueLabels: string[] = [];
         var myWorkOrdersPastDueData: number[] = [];
         WorkOrdersPastDue.forEach(w => {
-            myWorkOrdersPastDueLabels.push(w.reportLabel.split(' ')[0]);
+            myWorkOrdersPastDueLabels.push(format(parse(w.reportLabel.split(' ')[0], 'dd-MM-yyyy', new Date()), 'dd MMM'));
             myWorkOrdersPastDueData.push(w.quantity);
         });
         setWorkOrdersPastDueLabels(myWorkOrdersPastDueLabels);

@@ -2,12 +2,13 @@ import { format } from 'date-fns';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
 import { Grid, Label, Loader, Pagination, Table } from 'semantic-ui-react';
+import { history } from '../../..';
 import { PagingParams } from '../../../app/models/pagination';
 import { useStore } from '../../../app/stores/store';
 
 export default observer(function WorkOrdersTable() {
     const { workOrderStore } = useStore();
-    const { workOrdersByDate, workOrderRegistery, loadWorkOrders, setPagingParams, pagination } = workOrderStore;
+    const { workOrdersByDate, workOrderRegistery, loadWorkOrders, setPagingParams, pagination, workOrderToEdit, setWorkOrderToEdit } = workOrderStore;
     const [loadingNext, setLoadingNext] = useState(false);
 
     function handleGetNext(page: any) {
@@ -49,7 +50,7 @@ export default observer(function WorkOrdersTable() {
                 </Table.Header>
                 <Table.Body>
                     {workOrdersByDate.map(workOrder => (
-                        <Table.Row key={workOrder.id}>
+                        <Table.Row active={workOrder === workOrderToEdit} onDoubleClick={() => {setWorkOrderToEdit(workOrder); history.push(`/edit/${workOrder.id}`)}} key={workOrder.id}>
                             <Table.Cell>{workOrder.job}</Table.Cell>
                             <Table.Cell>{workOrder.type}</Table.Cell>
                             <Table.Cell>{workOrder.assembly}</Table.Cell>

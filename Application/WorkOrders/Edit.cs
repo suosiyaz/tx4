@@ -11,7 +11,7 @@ namespace Application.WorkOrders
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public WorkOrder WorkOrder { get; set; }
+            public WorkOrderCreateDto WorkOrder { get; set; }
         }
 
         public class CommandValidator : AbstractValidator<Command>

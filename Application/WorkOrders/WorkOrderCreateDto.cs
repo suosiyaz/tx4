@@ -1,6 +1,6 @@
 namespace Application.WorkOrders
 {
-    public class WorkOrderDto
+    public class WorkOrderCreateDto
     {
         public Guid Id { get; set; }
         public int Job { get; set; }
@@ -17,8 +17,6 @@ namespace Application.WorkOrders
         public string OrderStatus { get; set; }
         public string ProdLine { get; set; }
         public string Organization { get; set; }
-        public bool SLABreached { get; set; }
-        public int Aged { get; set; }
         public int? ParentJob { get; set; }
         public bool HotOrder { get; set; }
     }
