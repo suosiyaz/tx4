@@ -23,7 +23,7 @@ namespace Infrastructure.Security
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, IsAdminRequirement requirement)
         {
-            var userId = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = context.User.FindFirstValue(ClaimTypes.Name);
 
             if (userId == null) return Task.CompletedTask;
 

@@ -1,4 +1,5 @@
 using Application.HotNewses;
+using Application.Users;
 using Application.WorkOrders;
 using AutoMapper;
 using Domain;
@@ -10,6 +11,8 @@ namespace Application.Core
         public MappingProfiles()
         {
             CreateMap<WorkOrder, WorkOrder>();
+            CreateMap<UserCreateDto, AppUser>();
+            CreateMap<UserUpdateDto, AppUser>();
             CreateMap<WorkOrderCreateDto, WorkOrder>();
             CreateMap<WorkOrder, WorkOrderDto>()
                 .ForMember(d => d.Aged, o => o.MapFrom(s => (s.CompletionDate != null && s.DateReleased != null) ? (int)(s.CompletionDate - s.DateReleased).Value.Days : 0 ))
@@ -18,6 +21,7 @@ namespace Application.Core
             CreateMap<HotNews, HotNewsDto>()
                 .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.Author.FirstName))
                 .ForMember(d => d.UserName, o => o.MapFrom(s => s.Author.UserName));
+            CreateMap<AppUser, UserDto>();
         }
     }
 }

@@ -46,7 +46,7 @@ export default observer(function BarChart({titleText, labels = ['a','a','a','a',
             {
                 label: reportLabel,
                 data: reportData,
-                backgroundColor: 'rgb(24, 42, 115)',
+                backgroundColor: 'rgb(1, 81, 154)',
                 stack: 'Stack 0',
             }
         ],

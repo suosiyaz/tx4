@@ -5,9 +5,20 @@ export interface User {
     userRole: string;
 }
 
-export interface UserFormValues {
+export interface UserLogin {
     email: string;
     password: string;
-    displayName?: string;
-    userName?: string;
+}
+
+export class UserDetail {
+    firstName: string = '';
+    lastName: string = '';
+    team: string = '';
+    organisation: string = '';
+    userRole: string = '';
+    isActive: boolean = true;
+    email: string = '';
+    userName: string = '';
+    password?: string = '';
+    error?: string = '';
 }

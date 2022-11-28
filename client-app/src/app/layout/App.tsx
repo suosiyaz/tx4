@@ -15,6 +15,7 @@ import LoadingComponent from './LoadingComponent';
 import ModalContainer from '../common/modals/ModalContainer';
 import SideMenu from './SideMenu';
 import OpenWorkOrders from '../../features/workOrders/open/OpenWorkOrders';
+import UsersDashboard from '../../features/users/dashboard/UsersDashboard';
 
 function App() {
   const location = useLocation();
@@ -22,7 +23,7 @@ function App() {
 
   useEffect(() => {
     if (commonStore.token) {
-      userStore.getUser().finally(() => commonStore.setAppLoaded());
+      userStore.getCurrentUser().finally(() => commonStore.setAppLoaded());
     } else {
       commonStore.setAppLoaded();
     }
@@ -50,6 +51,7 @@ function App() {
                     <Route path='/dashboard' component={WorkOrderDashboard} />
                     <Route path='/openOrders' component={OpenWorkOrders} />
                     <Route path='/releaseOrder' component={WorkOrderForm} />
+                    <Route path='/users' component={UsersDashboard} />
                     <Route key={location.key} path={['/createWorkOrder', '/manage/:id']} component={WorkOrderForm} />
                     <Route path='/errors' component={TestErrors} />
                     <Route path='/server-error' component={ServerError} />

@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import { history } from '../..';
 import { PaginatedResult } from '../models/pagination';
 import { Report } from '../models/report';
-import { User, UserFormValues } from '../models/user';
+import { User, UserDetail, UserLogin } from '../models/user';
 import { WorkOrder, WorkOrderFormValues } from '../models/workOrder';
 import { store } from '../stores/store';
 
@@ -83,8 +83,12 @@ const WorkOrders = {
 
 const Account = {
     current: () => requests.get<User>('account'),
-    login: (user: UserFormValues) => requests.post<User>('account/login', user),
-    register: (user: UserFormValues) => requests.post<User>('account/register', user)
+    login: (user: UserLogin) => requests.post<User>('account/login', user),
+    create: (user: UserDetail) => requests.post<void>('users', user),
+    update: (user: UserDetail) => requests.put<void>(`users/${user.userName}`, user),
+    delete: (userName: string) => requests.delete<void>(`users/${userName}`),
+    list: (searchKey: string) => requests.get<UserDetail[]>(`users?searchKey=${searchKey}`),
+    details: (userName: string) => requests.get<UserDetail>(`users/${userName}`)
 }
 
 const agent = {

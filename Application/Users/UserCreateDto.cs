@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace API.DTOs
+namespace Application.Users
 {
-    public class RegisterDto
+    public class UserCreateDto
     {
         [Required]
         public string FirstName { get; set; }
@@ -14,5 +14,15 @@ namespace API.DTOs
         public string Password { get; set; }
         [Required]
         public string UserName { get; set; }
+        [Required]
+        public string LastName { get; set; }
+        [Required]
+        public string Team { get; set; }
+        [Required]
+        public string UserRole { get; set; }
+        [Required]
+        public string Organisation { get; set; }
+        [Required]
+        public bool IsActive { get; set; }
     }
 }

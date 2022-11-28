@@ -81,48 +81,32 @@ export default observer(function WorkOrderForm() {
                                 <Grid.Column width={4}>
                                     <Header as='h4' content='Work Order' color='teal' />
                                     <MyTextInput name='job' placeholder='Work Order' />
-                                </Grid.Column>
-                                <Grid.Column width={4}>
-                                    <Header as='h4' content='Released Date' color='teal' />
-                                    <MyDateInput name='dateReleased' placeholderText='Released Date' />
-                                </Grid.Column>
-                                <Grid.Column width={4}>
-                                    <Header as='h4' content='Order Type' color='teal' />
-                                    <MySelectInput name='type' placeholder='Order Type' options={OrderTypeOptions} />
-                                </Grid.Column>
-                                <Grid.Column width={4}>
-                                    <Header as='h4' content='Work Order Quantity' color='teal' />
-                                    <MyTextInput name='orderQuantity' type='number' placeholder='Work Order Quantity' />
-                                </Grid.Column>
-                                <Grid.Column width={4}>
                                     <Header as='h4' content='Start Date' color='teal' />
                                     <MyDateInput name='startDate' placeholderText='Start Date' />
-                                </Grid.Column>
-                                <Grid.Column width={4}>
-                                    <Header as='h4' content='Assembly' color='teal' />
-                                    <MyTextInput name='assembly' placeholder='Assembly' />
-                                </Grid.Column>
-                                <Grid.Column width={4}>
-                                    <Header as='h4' content='Completion Date' color='teal' />
-                                    <MyDateInput name='completionDate' placeholderText='Completion Date' />
-                                </Grid.Column>
-                                <Grid.Column width={4}>
-                                    <Header as='h4' content='Product Line / Family' color='teal' />
-                                    <MySelectInput name='prodLine' placeholder='Product Line / Family' options={ProdLineOptions} />
-                                </Grid.Column>
-                                <Grid.Column width={4}>
                                     <Header as='h4' content='Schedule To Release' color='teal' />
                                     <MyDateInput name='scheduleToRelease' placeholderText='Schedule to Release' />
                                 </Grid.Column>
                                 <Grid.Column width={4}>
+                                    <Header as='h4' content='Released Date' color='teal' />
+                                    <MyDateInput name='dateReleased' placeholderText='Released Date' />
+                                    <Header as='h4' content='Assembly' color='teal' />
+                                    <MyTextInput name='assembly' placeholder='Assembly' />
                                     <Header as='h4' content='Class' color='teal' />
                                     <MySelectInput name='class' placeholder='Class' options={ClassOptions} />
                                 </Grid.Column>
                                 <Grid.Column width={4}>
+                                    <Header as='h4' content='Order Type' color='teal' />
+                                    <MySelectInput name='type' placeholder='Order Type' options={OrderTypeOptions} />
+                                    <Header as='h4' content='Completion Date' color='teal' />
+                                    <MyDateInput name='completionDate' placeholderText='Completion Date' />
                                     <Header as='h4' content='Parent WO Number' color='teal' />
                                     <MyTextInput name='parentWONumber' placeholder='Parent WO Number' />
                                 </Grid.Column>
                                 <Grid.Column width={4}>
+                                    <Header as='h4' content='Work Order Quantity' color='teal' />
+                                    <MyTextInput name='orderQuantity' type='number' placeholder='Work Order Quantity' />
+                                    <Header as='h4' content='Product Line / Family' color='teal' />
+                                    <MySelectInput name='prodLine' placeholder='Product Line / Family' options={ProdLineOptions} />
                                     <Header as='h4' content='Organization' color='teal' />
                                     <MySelectInput name='organization' placeholder='Organization' options={OrganizationOptions} />
                                 </Grid.Column>
@@ -130,7 +114,7 @@ export default observer(function WorkOrderForm() {
                                     <Header as='h4' content='Hot Order' color='teal' />
                                     <Checkbox slider onChange={(e, {checked}) => setHotOrder(checked!)} />
                                 </Grid.Column>
-                                <Grid.Column width={16}>
+                                <Grid.Column width={12}>
                                     <Button.Group floated='right'>
                                         <Button disabled={isSubmitting || !dirty || !isValid} loading={isSubmitting} floated='right' positive type='submit' content='Save' onClick={() => setStatus('Saved')} />
                                         <Button.Or />
