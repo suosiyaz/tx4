@@ -17,6 +17,10 @@ export default observer(function RegisterForm() {
     const [isActive, setIsActive] = useState<boolean>(true);
     const { selectedUser, clearSelectedUser } = userStore;
 
+    useEffect(() => {
+        if (selectedUser) setIsActive(selectedUser.isActive);
+    }, [selectedUser])
+
     return (
         <Formik
             initialValues={selectedUser ? selectedUser : new UserDetail()}
@@ -40,7 +44,7 @@ export default observer(function RegisterForm() {
                 })
             }
         >
-            {({ handleSubmit, isSubmitting, errors, isValid, dirty }) => (
+            {({ handleSubmit, isSubmitting, errors, isValid, dirty, setFieldValue }) => (
                 <Form className='ui form error' onSubmit={handleSubmit} autoComplete='off'>
                     <Grid>
                         <Grid.Column width={4}>
@@ -69,7 +73,7 @@ export default observer(function RegisterForm() {
                         </Grid.Column>
                         <Grid.Column width={4}>
                             <Header as='h4' content='Is Active' color='teal' />
-                            <Checkbox slider checked={isActive} name='isActive' onChange={(e, { checked }) => setIsActive(checked!)} />
+                            <Checkbox slider checked={isActive} name='isActive' onChange={(e, { checked }) => {setIsActive(checked!); setFieldValue('isActive', checked)}} />
                         </Grid.Column>
                         <Grid.Column width={6}>
                             <ErrorMessage name='error' render={() => <ValidationErrors errors={errors.error} />} />

@@ -22,7 +22,7 @@ export default observer(function HomePage() {
 
                 ) : (
                     <>
-                        <Button onClick={() => modalStore.openModal(<LoginForm />)} size='huge' inverted>Login</Button>
+                        <Button onClick={() => modalStore.openModal(<LoginForm />, 'mini')} size='huge' inverted>Login</Button>
                     </>
                 )}
             </Container>

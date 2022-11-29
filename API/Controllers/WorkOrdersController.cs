@@ -14,12 +14,21 @@ namespace API.Controllers
             return HandlePagedResult(result);
         }
 
+        [Authorize(Policy = "IsZebra")]
+        [HttpGet("saved")]
+        public async Task<IActionResult> GetSavedWorkOrders()
+        {
+            var result = await Mediator.Send(new ListSaved.Query());
+            return HandleResult(result);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetWorkOrder(Guid id)
         {
             return HandleResult(await Mediator.Send(new Details.Query { Id = id }));
         }
-
+        
+        [Authorize(Policy = "IsZebra")]
         [HttpPost]
         public async Task<IActionResult> CreateWorkOrder(WorkOrderCreateDto workOrder)
         {
@@ -33,7 +42,7 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Edit.Command {WorkOrder = workOrder}));
         }
 
-        [Authorize(Policy = "IsAdmin")]
+        [Authorize(Policy = "IsZebra")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteWorkOrder(Guid id)
         {

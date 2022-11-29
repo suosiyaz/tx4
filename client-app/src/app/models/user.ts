@@ -3,6 +3,7 @@ export interface User {
     firstName: string;
     token: string;
     userRole: string;
+    team: string;
 }
 
 export interface UserLogin {

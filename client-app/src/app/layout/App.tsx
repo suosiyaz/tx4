@@ -16,6 +16,8 @@ import ModalContainer from '../common/modals/ModalContainer';
 import SideMenu from './SideMenu';
 import OpenWorkOrders from '../../features/workOrders/open/OpenWorkOrders';
 import UsersDashboard from '../../features/users/dashboard/UsersDashboard';
+import ZebraRoute from './ZebraRoute';
+import AdminRoute from './AdminRoute';
 
 function App() {
   const location = useLocation();
@@ -50,9 +52,8 @@ function App() {
                   <Switch>
                     <Route path='/dashboard' component={WorkOrderDashboard} />
                     <Route path='/openOrders' component={OpenWorkOrders} />
-                    <Route path='/releaseOrder' component={WorkOrderForm} />
-                    <Route path='/users' component={UsersDashboard} />
-                    <Route key={location.key} path={['/createWorkOrder', '/manage/:id']} component={WorkOrderForm} />
+                    <ZebraRoute path='/releaseOrder' component={WorkOrderForm} />
+                    <AdminRoute path='/users' component={UsersDashboard} />
                     <Route path='/errors' component={TestErrors} />
                     <Route path='/server-error' component={ServerError} />
                     <Route component={NotFound} />

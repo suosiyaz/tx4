@@ -6,32 +6,32 @@ using Persistence;
 
 namespace Infrastructure.Security
 {
-    public class IsAdminRequirement : IAuthorizationRequirement
+    public class IsZebraRequirement : IAuthorizationRequirement
     {
         
     }
 
-    public class IsAdminRequirementHandler : AuthorizationHandler<IsAdminRequirement>
+    public class IsZebraRequirementHandler : AuthorizationHandler<IsZebraRequirement>
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly DataContext _dbContext;
-        public IsAdminRequirementHandler(DataContext dbContext, IHttpContextAccessor httpContextAccessor)
+        public IsZebraRequirementHandler(DataContext dbContext, IHttpContextAccessor httpContextAccessor)
         {
             _dbContext = dbContext;
             _httpContextAccessor = httpContextAccessor;
         }
 
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, IsAdminRequirement requirement)
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, IsZebraRequirement requirement)
         {
             var userId = context.User.FindFirstValue(ClaimTypes.Name);
 
             if (userId == null) return Task.CompletedTask;
 
-            var admin = _dbContext.Users
+            var user = _dbContext.Users
                 .AsNoTracking()
-                .SingleOrDefaultAsync(x => x.UserName == userId && x.UserRole.ToLower() == "admin").Result;
+                .SingleOrDefaultAsync(x => x.UserName == userId && x.Team.ToLower() == "zebra" && (x.UserRole.ToLower() == "admin" || x.UserRole.ToLower() == "planner")).Result;
 
-            if (admin == null) return Task.CompletedTask;
+            if (user == null) return Task.CompletedTask;
 
             context.Succeed(requirement);
 

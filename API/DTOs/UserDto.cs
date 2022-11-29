@@ -6,5 +6,6 @@ namespace API.DTOs
         public string Token { get; set; }
         public string UserName { get; set; }
         public string UserRole { get; set; }
+        public string Team { get; set; }
     }
 }

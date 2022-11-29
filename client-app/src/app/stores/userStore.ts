@@ -18,6 +18,14 @@ export default class UserStore {
         return !!this.user;
     }
 
+    get isAdmin() {
+        return this.user?.userRole.toLowerCase() === 'admin';
+    }
+
+    get isZebra() {
+        return this.user?.team.toLowerCase() === 'zebra' && (this.user?.userRole.toLowerCase() === 'admin' || this.user?.userRole.toLowerCase() === 'planner');
+    }
+
     login = async (creds: UserLogin) => {
         try {
             const user = await agent.Account.login(creds);

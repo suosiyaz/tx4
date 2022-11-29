@@ -54,8 +54,8 @@ export default observer(function UsersTable() {
                             </Table.Cell>
                             <Table.Cell>
                                 <Button.Group floated='right'>
-                                    <Button primary floated='right' onClick={() => loadUser(user.userName)}>Edit</Button>
-                                    <Button negative floated='right' onClick={() => {setConfirm(true); setDeleteUserName(user.userName)}}>Delete</Button>
+                                    <Button basic color='blue' floated='right' onClick={() => loadUser(user.userName)}>Edit</Button>
+                                    <Button basic color='red' floated='right' onClick={() => {setConfirm(true); setDeleteUserName(user.userName)}}>Delete</Button>
                                 </Button.Group>
                             </Table.Cell>
                         </Table.Row>

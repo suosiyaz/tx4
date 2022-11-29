@@ -28,7 +28,7 @@ namespace Application.WorkOrders
                 var query = _context.WorkOrders
                     .OrderByDescending(d => d.DateReleased)
                     .ProjectTo<WorkOrderDto>(_mapper.ConfigurationProvider)
-                    .AsQueryable();
+                    .AsQueryable().Where(x => x.OrderStatus.ToLower() != "saved");
 
                 if (!String.IsNullOrEmpty(request.Params.WorkOrders))
                 {

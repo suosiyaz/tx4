@@ -13,7 +13,6 @@ namespace Application.WorkOrders
             RuleFor(x => x.Assembly).NotEmpty();
             RuleFor(x => x.ProdLine).NotEmpty();
             RuleFor(x => x.Class).NotEmpty();
-            RuleFor(x => x.HotOrder).NotEmpty();
             RuleFor(x => x.Organization).NotEmpty();
         }
     }

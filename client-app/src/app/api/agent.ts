@@ -74,6 +74,7 @@ const requests = {
 
 const WorkOrders = {
     list: (params: URLSearchParams) => axios.get<PaginatedResult<WorkOrder[]>>('workOrders', {params}).then(responseBody),
+    listSaved: () => axios.get<WorkOrder[]>('workOrders/saved'),
     details: (id: string) => requests.get<WorkOrder>(`workOrders/${id}`),
     create: (workOrder: WorkOrderFormValues) => requests.post<void>('workOrders', workOrder),
     update: (workOrder: WorkOrderFormValues) => requests.put<void>(`workOrders/${workOrder.id}`, workOrder),

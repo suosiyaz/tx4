@@ -5,9 +5,9 @@ import { Button, Checkbox, Form, Grid, Header, Segment } from 'semantic-ui-react
 import { useStore } from '../../../app/stores/store';
 import { v4 as uuid } from 'uuid';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
-import { WorkOrderFormValues } from '../../../app/models/workOrder';
+import { WorkOrder, WorkOrderFormValues } from '../../../app/models/workOrder';
 import * as Yup from 'yup';
-import { Formik } from 'formik';
+import { Field, Formik } from 'formik';
 import MyTextInput from '../../../app/common/form/MyTextInput';
 import MySelectInput from '../../../app/common/form/MySelectInput';
 import { ProdLineOptions } from '../../../app/common/options/prodLineOptions';
@@ -15,14 +15,18 @@ import MyDateInput from '../../../app/common/form/MyDateInput';
 import { OrderTypeOptions } from '../../../app/common/options/orderTypeOptions';
 import { ClassOptions } from '../../../app/common/options/classOptions';
 import { OrganizationOptions } from '../../../app/common/options/organizationOptions';
+import SavedWorkOrdersTable from './SavedWorkOrdersTable';
 
 export default observer(function WorkOrderForm() {
     const { workOrderStore } = useStore();
-    const { createWorkOrder, updateWorkOrder, loadWorkOrder, loadingInitial } = workOrderStore;
+    const { createWorkOrder, updateWorkOrder, selectedSavedWorkOrder, loadingInitial } = workOrderStore;
     const { id } = useParams<{ id: string }>();
-    const [workOrder, setWorkOrder] = useState<WorkOrderFormValues>(new WorkOrderFormValues());
     const [status, setStatus] = useState<string>('Saved');
     const [hotOrder, setHotOrder] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (selectedSavedWorkOrder) setHotOrder(selectedSavedWorkOrder.hotOrder);
+    }, [selectedSavedWorkOrder])
 
     const validationSchema = Yup.object({
         job: Yup.string().required('Work Order is required'),
@@ -34,10 +38,6 @@ export default observer(function WorkOrderForm() {
         hotOrder: Yup.string().required(),
         organization: Yup.string().required()
     })
-
-    useEffect(() => {
-        if (id) loadWorkOrder(id).then(workOrder => setWorkOrder(new WorkOrderFormValues(workOrder)));
-    }, [id, loadWorkOrder])
 
     function handleFormSubmit(workOrder: WorkOrderFormValues) {
         workOrder.orderStatus = status;
@@ -73,9 +73,9 @@ export default observer(function WorkOrderForm() {
                 <Formik
                     validationSchema={validationSchema}
                     enableReinitialize
-                    initialValues={workOrder}
+                    initialValues={selectedSavedWorkOrder ? Object.assign(WorkOrderFormValues, selectedSavedWorkOrder) : new WorkOrderFormValues}
                     onSubmit={(values, {resetForm}) => {handleFormSubmit(values); resetForm();}}>
-                    {({ handleSubmit, isValid, isSubmitting, dirty, resetForm }) => (
+                    {({ handleSubmit, isValid, isSubmitting, dirty, resetForm, setFieldValue }) => (
                         <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
                             <Grid>
                                 <Grid.Column width={4}>
@@ -112,7 +112,7 @@ export default observer(function WorkOrderForm() {
                                 </Grid.Column>
                                 <Grid.Column width={4}>
                                     <Header as='h4' content='Hot Order' color='teal' />
-                                    <Checkbox slider onChange={(e, {checked}) => setHotOrder(checked!)} />
+                                    <Checkbox name='hotOrder' slider checked={hotOrder} onChange={(e, {checked}) => {setHotOrder(checked!); setFieldValue('hotOrder', checked)}} />
                                 </Grid.Column>
                                 <Grid.Column width={12}>
                                     <Button.Group floated='right'>
@@ -127,6 +127,9 @@ export default observer(function WorkOrderForm() {
                         </Form>
                     )}
                 </Formik>
+            </Segment>
+            <Segment>
+                <SavedWorkOrdersTable />
             </Segment>
         </>
     )

@@ -57,7 +57,8 @@ namespace API.Controllers
                 FirstName = user.FirstName,
                 UserRole = user.UserRole,
                 Token = _tokenService.CreateToken(user),
-                UserName = user.UserName
+                UserName = user.UserName,
+                Team = user.Team
             };
         }
     }

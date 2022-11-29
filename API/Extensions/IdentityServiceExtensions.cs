@@ -53,8 +53,13 @@ namespace API.Extensions
                 {
                     policy.Requirements.Add(new IsAdminRequirement());
                 });
+                opt.AddPolicy("IsZebra", policy =>
+                {
+                    policy.Requirements.Add(new IsZebraRequirement());
+                });
             });
             services.AddTransient<IAuthorizationHandler, IsAdminRequirementHandler>();
+            services.AddTransient<IAuthorizationHandler, IsZebraRequirementHandler>();
             services.AddScoped<TokenService>();
 
             return services;

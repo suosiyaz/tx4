@@ -7,7 +7,9 @@ import { WorkOrder, WorkOrderFormValues } from '../models/workOrder';
 
 export default class WorkOrderStore {
     workOrderRegistery = new Map<string, WorkOrder>();
+    savedWorkOrderRegistery = new Map<string, WorkOrder>();
     selectedWorkOrder: WorkOrder | undefined = undefined;
+    selectedSavedWorkOrder: WorkOrder | undefined = undefined;
     workOrderToEdit: WorkOrder | undefined = undefined;
     editMode = false;
     loading = false;
@@ -59,19 +61,13 @@ export default class WorkOrderStore {
         return params;
     }
 
-    get workOrdersByDate() {
-        return Array.from(this.workOrderRegistery.values()).sort((a, b) => a.dateReleased!.getTime() - b.dateReleased!.getTime());
-    }    
+    get workOrders() {
+        return Array.from(this.workOrderRegistery.values());
+    } 
 
-    get groupedWorkOrders() {
-        return Object.entries(
-            this.workOrdersByDate.reduce((workOrders, workOrder) => {
-                const dateReleased = format(workOrder.dateReleased!, 'dd MMM yyyy');
-                workOrders[dateReleased] = workOrders[dateReleased] ? [...workOrders[dateReleased], workOrder] : [workOrder];
-                return workOrders;
-            }, {} as { [key: string]: WorkOrder[] })
-        )
-    }
+    get savedWorkOrders() {
+        return Array.from(this.savedWorkOrderRegistery.values());
+    } 
 
     loadWorkOrders = async () => {
         this.setLoadingInitial(true);
@@ -89,6 +85,21 @@ export default class WorkOrderStore {
         }
     }
 
+    loadSavedWorkOrders = async () => {
+        this.setLoadingInitial(true);
+        this.savedWorkOrderRegistery.clear();
+        try {
+            const result = await agent.WorkOrders.listSaved();
+            result.data.forEach(workOrder => {
+                this.setSavedWorkOrder(workOrder);
+            });
+            this.setLoadingInitial(false);
+        } catch (error) {
+            console.log(error);
+            this.setLoadingInitial(false);
+        }
+    }
+
     setPagination = (pagination: Pagination) => {
         this.pagination = pagination;
     }
@@ -97,6 +108,27 @@ export default class WorkOrderStore {
         let workOrder = this.getWorkOrder(id);
         if (workOrder) {
             this.selectedWorkOrder = workOrder;
+            return workOrder;
+        } else {
+            this.setLoadingInitial(true);
+            try {
+                workOrder = await agent.WorkOrders.details(id);
+                this.setSavedWorkOrder(workOrder);
+                runInAction(() => {
+                    this.selectedSavedWorkOrder = workOrder;
+                });
+                this.setLoadingInitial(false);
+                return workOrder;
+            } catch (error) {
+                console.log(error);
+                this.setLoadingInitial(false);
+            }
+        }
+    }
+    loadSavedWorkOrder = async (id: string) => {
+        let workOrder = this.getSavedWorkOrder(id);
+        if (workOrder) {
+            this.selectedSavedWorkOrder = workOrder;
             return workOrder;
         } else {
             this.setLoadingInitial(true);
@@ -122,8 +154,18 @@ export default class WorkOrderStore {
         this.workOrderRegistery.set(workOrder.id, workOrder);
     }
 
+    private setSavedWorkOrder = (workOrder: WorkOrder) => {
+        workOrder.dateReleased = new Date(workOrder.dateReleased!);
+        workOrder.startDate = new Date(workOrder.startDate!);
+        workOrder.completionDate = new Date(workOrder.completionDate!);
+        this.savedWorkOrderRegistery.set(workOrder.id, workOrder);
+    }
+
     private getWorkOrder = (id: string) => {
         return this.workOrderRegistery.get(id);
+    }
+    private getSavedWorkOrder = (id: string) => {
+        return this.savedWorkOrderRegistery.get(id);
     }
 
     setLoadingInitial = (state: boolean) => {
@@ -149,9 +191,31 @@ export default class WorkOrderStore {
             await agent.WorkOrders.update(workOrder);
             runInAction(() => {
                 if (workOrder.id) {
-                    let updatedWorkOrder = { ...this.getWorkOrder(workOrder.id), ...workOrder };
-                    this.workOrderRegistery.set(workOrder.id, updatedWorkOrder as WorkOrder);
-                    this.selectedWorkOrder = updatedWorkOrder as WorkOrder;
+                    if (workOrder.orderStatus.toLowerCase() === 'saved')
+                    {
+                        let updatedSavedWorkOrder = { ...this.getSavedWorkOrder(workOrder.id), ...workOrder };
+                        this.savedWorkOrderRegistery.set(workOrder.id, updatedSavedWorkOrder as WorkOrder);
+                    } else {
+                        let updatedWorkOrder = { ...this.getWorkOrder(workOrder.id), ...workOrder };
+                        this.workOrderRegistery.set(workOrder.id, updatedWorkOrder as WorkOrder);
+                    }
+                    this.selectedWorkOrder = undefined;
+                    this.selectedSavedWorkOrder = undefined;
+                }
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    releaseWorkOrder = async (workOrder: WorkOrderFormValues) => {
+        workOrder.orderStatus = 'released';
+        try {
+            await agent.WorkOrders.update(workOrder);
+            runInAction(() => {
+                if (workOrder.id) {
+                    this.savedWorkOrderRegistery.delete(workOrder.id);
+                    this.workOrderRegistery.set(workOrder.id, workOrder as WorkOrder);
                 }
             });
         } catch (error) {
@@ -161,11 +225,12 @@ export default class WorkOrderStore {
 
     deleteWorkOrder = async (id: string) => {
         this.loading = true;
+        console.log(id);
         try {
             await agent.WorkOrders.delete(id);
             runInAction(() => {
                 this.workOrderRegistery.delete(id);
-                this.editMode = false;
+                this.savedWorkOrderRegistery.delete(id);
                 this.loading = false;
             });
         } catch (error) {
