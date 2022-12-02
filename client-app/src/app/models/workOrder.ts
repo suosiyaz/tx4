@@ -1,3 +1,5 @@
+import { WorkOrderHistory } from './workOrderHistory';
+
 export interface WorkOrder {
     id: string;
     job: number;
@@ -12,13 +14,19 @@ export interface WorkOrder {
     completedQuantity: number;
     pendingQuantity: number;
     orderStatus: string;
+    reconfigurationStatus: string;
     prodLine: string;
     slaBreached: boolean;
     organization: string;
-    aged: number;
     parentJob: number;
     hotOrder: boolean;
-
+    aged: number;
+    helpRequiredFrom: string;
+    orderSplitChildWOCreated: boolean;
+    additionalComments: string;
+    history: WorkOrderHistory[];
+    orderProcessingLine: string;
+    expectedCompletionDate: Date;
   }
 
   export class WorkOrder implements WorkOrder {

@@ -2,7 +2,7 @@ import { Container, Grid } from 'semantic-ui-react';
 import NavBar from './NavBar';
 import { observer } from 'mobx-react-lite';
 import WorkOrderDashboard from '../../features/workOrders/dashboard/WorkOrderDashboard';
-import { Route, Switch, useLocation } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import WorkOrderForm from '../../features/workOrders/form/WorkOrderForm';
 import HomePage from '../../features/home/HomePage';
 import { ToastContainer } from 'react-toastify';
@@ -20,7 +20,6 @@ import ZebraRoute from './ZebraRoute';
 import AdminRoute from './AdminRoute';
 
 function App() {
-  const location = useLocation();
   const { commonStore, userStore } = useStore();
 
   useEffect(() => {

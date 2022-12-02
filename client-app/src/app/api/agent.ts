@@ -13,7 +13,7 @@ const sleep = (delay: number) => {
     });
 }
 
-axios.defaults.baseURL = 'http://localhost:5000/api/';
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 axios.interceptors.request.use(config => {
     const token = store.commonStore.token;
@@ -22,7 +22,7 @@ axios.interceptors.request.use(config => {
 })
 
 axios.interceptors.response.use(async response => {
-    await sleep(1000);
+    if (process.env.NODE_ENV === 'development') await sleep(1000);
     const pagination = response.headers['pagination'];
     if (pagination) {
         response.data = new PaginatedResult(response.data, JSON.parse(pagination));
@@ -42,9 +42,7 @@ axios.interceptors.response.use(async response => {
             if (data.errors) {
                 const modalStateErrors = [];
                 for (const key in data.errors) {
-                    if (data.errors[key]) {
-                        modalStateErrors.push(data.errors[key])
-                    }
+                    modalStateErrors.push(data.errors[key]);
                 }
                 throw modalStateErrors.flat();
             }
@@ -78,6 +76,7 @@ const WorkOrders = {
     details: (id: string) => requests.get<WorkOrder>(`workOrders/${id}`),
     create: (workOrder: WorkOrderFormValues) => requests.post<void>('workOrders', workOrder),
     update: (workOrder: WorkOrderFormValues) => requests.put<void>(`workOrders/${workOrder.id}`, workOrder),
+    reconfigure: (workOrder: WorkOrder) => requests.put<void>(`workOrders/reconfigure/${workOrder.id}`, workOrder),
     delete: (id: string) => requests.delete<void>(`workOrders/${id}`),
     report: (reportName: string) => requests.get<Report[]>(`workOrders/report?reportName=${reportName}`)
 }

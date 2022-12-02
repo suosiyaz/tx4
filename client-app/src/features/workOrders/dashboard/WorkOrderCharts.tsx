@@ -1,4 +1,4 @@
-import { format, parse, parseISO, parseJSON } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
 import { Grid, Tab } from 'semantic-ui-react';
@@ -58,7 +58,7 @@ export default observer(function WorkOrdeCharts() {
         var myWorkOrdersPastDueLabels: string[] = [];
         var myWorkOrdersPastDueData: number[] = [];
         WorkOrdersPastDue.forEach(w => {
-            myWorkOrdersPastDueLabels.push(format(parse(w.reportLabel.split(' ')[0], 'dd-MM-yyyy', new Date()), 'dd MMM'));
+            myWorkOrdersPastDueLabels.push(format(parseISO(w.reportLabel), 'dd MMM'));
             myWorkOrdersPastDueData.push(w.quantity);
         });
         setWorkOrdersPastDueLabels(myWorkOrdersPastDueLabels);

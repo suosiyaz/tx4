@@ -1,13 +1,12 @@
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { Button, Checkbox, Form, Grid, Header, Segment } from 'semantic-ui-react';
 import { useStore } from '../../../app/stores/store';
 import { v4 as uuid } from 'uuid';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
-import { WorkOrder, WorkOrderFormValues } from '../../../app/models/workOrder';
+import { WorkOrderFormValues } from '../../../app/models/workOrder';
 import * as Yup from 'yup';
-import { Field, Formik } from 'formik';
+import { Formik } from 'formik';
 import MyTextInput from '../../../app/common/form/MyTextInput';
 import MySelectInput from '../../../app/common/form/MySelectInput';
 import { ProdLineOptions } from '../../../app/common/options/prodLineOptions';
@@ -20,7 +19,6 @@ import SavedWorkOrdersTable from './SavedWorkOrdersTable';
 export default observer(function WorkOrderForm() {
     const { workOrderStore } = useStore();
     const { createWorkOrder, updateWorkOrder, selectedSavedWorkOrder, loadingInitial } = workOrderStore;
-    const { id } = useParams<{ id: string }>();
     const [status, setStatus] = useState<string>('Saved');
     const [hotOrder, setHotOrder] = useState<boolean>(false);
 
@@ -73,7 +71,7 @@ export default observer(function WorkOrderForm() {
                 <Formik
                     validationSchema={validationSchema}
                     enableReinitialize
-                    initialValues={selectedSavedWorkOrder ? Object.assign(WorkOrderFormValues, selectedSavedWorkOrder) : new WorkOrderFormValues}
+                    initialValues={selectedSavedWorkOrder ? Object.assign(WorkOrderFormValues, selectedSavedWorkOrder) : new WorkOrderFormValues()}
                     onSubmit={(values, {resetForm}) => {handleFormSubmit(values); resetForm();}}>
                     {({ handleSubmit, isValid, isSubmitting, dirty, resetForm, setFieldValue }) => (
                         <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>

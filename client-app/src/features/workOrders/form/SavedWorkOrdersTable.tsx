@@ -7,9 +7,9 @@ import { useStore } from '../../../app/stores/store';
 
 export default observer(function WorkOrdersTable() {
     const { workOrderStore } = useStore();
-    const { savedWorkOrders, deleteWorkOrder, savedWorkOrderRegistery, workOrderToEdit, setWorkOrderToEdit, loadSavedWorkOrders, loadSavedWorkOrder, releaseWorkOrder } = workOrderStore;
+    const { savedWorkOrders, deleteWorkOrder, savedWorkOrderRegistery, selectedSavedWorkOrder, loadSavedWorkOrders, loadSavedWorkOrder, releaseWorkOrder } = workOrderStore;
     const [deleteConfirm, setConfirm] = useState<boolean>(false);
-    const [deleteJob, setDeleteJob] = useState<WorkOrder>(new WorkOrder);
+    const [deleteJob, setDeleteJob] = useState<WorkOrder>(new WorkOrder());
 
     useEffect(() => {
         if (savedWorkOrderRegistery.size < 1) loadSavedWorkOrders();
@@ -22,8 +22,8 @@ export default observer(function WorkOrdersTable() {
                 content={'Do you want to delete work order ' + deleteJob.job + '?'}
                 cancelButton='No'
                 confirmButton='Yes'
-                onCancel={() => { setConfirm(false); setDeleteJob(new WorkOrder) }}
-                onConfirm={() => { deleteWorkOrder(deleteJob.id); setDeleteJob(new WorkOrder); setConfirm(false) }}
+                onCancel={() => { setConfirm(false); setDeleteJob(new WorkOrder()) }}
+                onConfirm={() => { deleteWorkOrder(deleteJob.id); setDeleteJob(new WorkOrder()); setConfirm(false) }}
             />
             <Table compact='very' size='small' singleLine color='teal'>
                 <Table.Header>
@@ -45,7 +45,7 @@ export default observer(function WorkOrdersTable() {
                 </Table.Header>
                 <Table.Body>
                     {savedWorkOrders.map(workOrder => (
-                        <Table.Row active={workOrder === workOrderToEdit} onDoubleClick={() => setWorkOrderToEdit(workOrder)} key={workOrder.id}>
+                        <Table.Row active={workOrder === selectedSavedWorkOrder} key={workOrder.id}>
                             <Table.Cell>{workOrder.job}</Table.Cell>
                             <Table.Cell>{workOrder.type}</Table.Cell>
                             <Table.Cell>{workOrder.assembly}</Table.Cell>

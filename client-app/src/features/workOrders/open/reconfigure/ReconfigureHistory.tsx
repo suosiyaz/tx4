@@ -1,6 +1,11 @@
+import { format } from 'date-fns';
+import { observer } from 'mobx-react-lite';
 import { Header, Segment, Table } from 'semantic-ui-react';
+import { useStore } from '../../../../app/stores/store';
 
-export default function ReconfigureHistory() {
+export default observer(function ReconfigureHistory() {
+    const { workOrderStore } = useStore();
+    const { selectedWorkOrder } = workOrderStore;
 
     return (
         <>
@@ -24,31 +29,19 @@ export default function ReconfigureHistory() {
                             <Table.HeaderCell>Comments</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
-                    {/* <Table.Body>
-                        {workOrdersByDate.map(workOrder => (
-                            <Table.Row active={workOrder === workOrderToEdit} onDoubleClick={() => { setWorkOrderToEdit(workOrder); modalStore.openModal(<ReconfigureWorkOrder />, 'fullscreen') }} key={workOrder.id}>
-                                <Table.Cell>{workOrder.job}</Table.Cell>
-                                <Table.Cell>{workOrder.type}</Table.Cell>
-                                <Table.Cell>{workOrder.assembly}</Table.Cell>
-                                <Table.Cell>{workOrder.class}</Table.Cell>
-                                <Table.Cell>{format(workOrder.dateReleased!, 'dd MMM yyyy')}</Table.Cell>
-                                <Table.Cell>{format(workOrder.startDate!, 'dd MMM yyyy')}</Table.Cell>
-                                <Table.Cell>{format(workOrder.completionDate!, 'dd MMM yyyy')}</Table.Cell>
-                                <Table.Cell>{workOrder.orderQuantity}</Table.Cell>
-                                <Table.Cell>{workOrder.completedQuantity}</Table.Cell>
-                                <Table.Cell>{workOrder.pendingQuantity}</Table.Cell>
-                                <Table.Cell>{workOrder.orderStatus}</Table.Cell>
-                                <Table.Cell>{workOrder.prodLine}</Table.Cell>
-                                <Table.Cell>{workOrder.organization}</Table.Cell>
-                                <Table.Cell>{Math.round(workOrder.aged)}</Table.Cell>
-                                <Table.Cell>
-                                    <Label ribbon='right' color={workOrder.slaBreached ? 'red' : 'green'}>{workOrder.slaBreached === true ? 'Yes' : 'No'}</Label>
-                                </Table.Cell>
+                    <Table.Body>
+                        {selectedWorkOrder?.history.map(history => (
+                            <Table.Row key={history.id}>
+                                <Table.Cell>{history.team}</Table.Cell>
+                                <Table.Cell>{history.userName}</Table.Cell>
+                                <Table.Cell>{format(history.updatedOn, 'dd MMM yyyy')}</Table.Cell>
+                                <Table.Cell>{history.courseOfAction}</Table.Cell>
+                                <Table.Cell>{history.comments}</Table.Cell>
                             </Table.Row>
                         ))}
-                    </Table.Body> */}
+                    </Table.Body>
                 </Table>
             </Segment>
         </>
     )
-}
+})

@@ -36,11 +36,12 @@ namespace Application.WorkOrders
                 }
                 else if (request.ReportName == "WorkOrdersPastDue")
                 {
-                    var query =  _context.WorkOrders
+                    
+                    var query = _context.WorkOrders
                     .OrderByDescending(d => d.DateReleased)
                     .ProjectTo<WorkOrderDto>(_mapper.ConfigurationProvider)
                     .AsEnumerable();
-                    ReportList = query.Where(s => s.CompletionDate != null && s.DateReleased.Value.Date >= firstDayOfMonth && s.DateReleased.Value.Date <= lastDayOfMonth && s.SLABreached).GroupBy(x => x.DateReleased.Value.Date).Select(x => new ReportDto { ReportLabel = x.Key.ToString(), Quantity = x.Count() }).ToList();
+                    ReportList = query.Where(s => s.CompletionDate != null && s.DateReleased.Value.Date >= firstDayOfMonth && s.DateReleased.Value.Date <= lastDayOfMonth && s.SLABreached).GroupBy(x => x.DateReleased.Value.Date).Select(x => new ReportDto { ReportLabel = x.Key.ToString("yyyy-MM-dd"), Quantity = x.Count() }).ToList();
                 }
                 else if (request.ReportName == "HotWorkOrdersDaily")
                 {

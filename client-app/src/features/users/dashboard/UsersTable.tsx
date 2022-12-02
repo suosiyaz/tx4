@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite'
 import { useEffect, useState } from 'react';
-import { Button, Confirm, Icon, Input, Label, Table } from 'semantic-ui-react';
+import { Button, Confirm, Input, Label, Table } from 'semantic-ui-react';
 import { useStore } from '../../../app/stores/store';
 
 export default observer(function UsersTable() {
@@ -12,7 +12,7 @@ export default observer(function UsersTable() {
 
     useEffect(() => {
         if (usersRegistery.size < 1) loadUsers('');
-    }, [loadUsers])
+    }, [loadUsers, usersRegistery.size])
 
     return (
         <>

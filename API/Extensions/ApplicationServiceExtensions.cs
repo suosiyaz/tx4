@@ -19,7 +19,15 @@ namespace API.Extensions
             });
             services.AddDbContext<DataContext>(opt =>
             {
-                opt.UseSqlite(config.GetConnectionString("DefaultConnection"));
+                var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+                if (env == "Development")
+                {
+                    // opt.UseSqlite(config.GetConnectionString("DefaultConnection"));
+                    opt.UseSqlServer(config.GetConnectionString("DefaultConnection"));
+                }
+                else {
+                    opt.UseSqlServer(config.GetConnectionString("DefaultConnection"));
+                }
             });
             services.AddCors(opt =>
             {

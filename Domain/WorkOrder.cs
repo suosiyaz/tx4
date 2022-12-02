@@ -23,6 +23,8 @@ namespace Domain
         public string HelpRequiredFrom { get; set; }
         public bool OrderSplitChildWOCreated { get; set; }
         public string AdditionalComments { get; set; }
+        public string OrderProcessingLine { get; set; }
+        public DateTime? ExpectedCompletionDate { get; set; }
         public ICollection<WorkOrderHistory> History { get; set; }        
 
     }

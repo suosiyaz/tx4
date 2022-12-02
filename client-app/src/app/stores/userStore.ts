@@ -75,7 +75,6 @@ export default class UserStore {
                 }
             });
         } catch (error) {
-            this.selectedUser = undefined;
             throw error;
         }
     }
@@ -87,7 +86,6 @@ export default class UserStore {
             users.forEach(user => {
                 this.setUser(user);
             });
-            console.log(users);
         } catch (error) {
             throw error;
         }

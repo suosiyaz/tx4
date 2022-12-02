@@ -1,6 +1,6 @@
 import { ErrorMessage, Form, Formik } from 'formik';
 import { observer } from 'mobx-react-lite';
-import { Button, Checkbox, Grid, Header, Segment } from 'semantic-ui-react';
+import { Button, Checkbox, Grid, Header } from 'semantic-ui-react';
 import MyTextInput from '../../app/common/form/MyTextInput';
 import { useStore } from '../../app/stores/store';
 import * as Yup from 'yup';
@@ -25,7 +25,8 @@ export default observer(function RegisterForm() {
         <Formik
             initialValues={selectedUser ? selectedUser : new UserDetail()}
             enableReinitialize
-            onSubmit={(values, { setErrors }) => selectedUser ? userStore.update(values).catch(error =>  setErrors({ error })) : userStore.register(values).catch(error => setErrors({ error }))}
+            validateOnMount
+            onSubmit={(values, { setErrors, setFieldError }) => selectedUser ? userStore.update(values).catch(error =>  setFieldError('userRole', error )) : userStore.register(values).catch(error => setErrors({ error }))}
             validationSchema={selectedUser ? Yup.object({
                 userName: Yup.string().required(),
                 team: Yup.string().required(),

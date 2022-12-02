@@ -1,25 +1,20 @@
 import { Formik } from 'formik';
-import { useState } from 'react';
-import { Button, Checkbox, Form, Grid, Header, Label, Segment } from 'semantic-ui-react';
+import { Button, Form, Grid, Header, Label, Segment } from 'semantic-ui-react';
 import MyDateInput from '../../../../app/common/form/MyDateInput';
 import MySelectInput from '../../../../app/common/form/MySelectInput';
 import MyTextInput from '../../../../app/common/form/MyTextInput';
-import { ClassOptions } from '../../../../app/common/options/classOptions';
 import { OrderTypeOptions } from '../../../../app/common/options/orderTypeOptions';
-import { WorkOrderFormValues } from '../../../../app/models/workOrder';
+import { WorkOrder } from '../../../../app/models/workOrder';
 import * as Yup from 'yup';
-import { v4 as uuid } from 'uuid';
 import { useStore } from '../../../../app/stores/store';
 import { ProdLineOptions } from '../../../../app/common/options/prodLineOptions';
-import { OrganizationOptions } from '../../../../app/common/options/organizationOptions';
 import { StatusOptions } from '../../../../app/common/options/statusOptions';
+import { ReconfigurationStatusOptions } from '../../../../app/common/options/reconfigurationStatusOptions';
+import { observer } from 'mobx-react-lite';
 
-export default function ReconfigureForm() {
-    const { workOrderStore } = useStore();
-    const { createWorkOrder, updateWorkOrder, loadWorkOrder, loadingInitial } = workOrderStore;
-    const [workOrder, setWorkOrder] = useState<WorkOrderFormValues>(new WorkOrderFormValues());
-    const [hotOrder, setHotOrder] = useState<boolean>(false);
-    const [status, setStatus] = useState<string>('Saved');
+export default observer(function ReconfigureForm() {
+    const { workOrderStore, modalStore } = useStore();
+    const { selectedWorkOrder, reconfigureWorkOrder } = workOrderStore;
 
     const validationSchema = Yup.object({
         job: Yup.string().required('Work Order is required'),
@@ -32,33 +27,22 @@ export default function ReconfigureForm() {
         organization: Yup.string().required()
     })
 
-    function handleFormSubmit(workOrder: WorkOrderFormValues) {
-        workOrder.orderStatus = status;
-        workOrder.completedQuantity = 0;
-        workOrder.pendingQuantity = workOrder.orderQuantity;
-        workOrder.hotOrder = hotOrder;
-        if (!workOrder.id) {
-            let newWorkOrder = {
-                ...workOrder,
-                id: uuid()
-            };
-            console.log(workOrder);
-            createWorkOrder(newWorkOrder);
-        } else {
-            updateWorkOrder(workOrder);
-        }
+    function handleFormSubmit(workOrder: WorkOrder) {
+        reconfigureWorkOrder(workOrder);
     }
 
     return (
         <>
             <Segment attached>
-                <Label attached='top' as='h4' color='red' content='Hot Order' style={{ textAlign: 'center' }} />
+                {selectedWorkOrder && selectedWorkOrder.hotOrder &&
+                    <Label attached='top' as='h4' color='red' content='Hot Order' style={{ textAlign: 'center' }} />
+                }
                 <Formik
                     validationSchema={validationSchema}
                     enableReinitialize
-                    initialValues={workOrder}
+                    initialValues={selectedWorkOrder!}
                     onSubmit={(values, { resetForm }) => { handleFormSubmit(values); resetForm(); }}>
-                    {({ handleSubmit, isValid, isSubmitting, dirty, resetForm }) => (
+                    {({ handleSubmit, isValid, isSubmitting, dirty }) => (
                         <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
                             <Grid>
                                 <Grid.Column width={4}>
@@ -68,8 +52,6 @@ export default function ReconfigureForm() {
                                     <MyTextInput name='orderQuantity' type='number' placeholder='Work Order Quantity' />
                                     <Header as='h4' content='Completion Date' color='teal' />
                                     <MyDateInput name='completionDate' placeholderText='Completion Date' />
-                                    <Header as='h4' content='Schedule To Release' color='teal' />
-                                    <MyDateInput name='scheduleToRelease' placeholderText='Schedule to Release' />
                                 </Grid.Column>
                                 <Grid.Column width={4}>
                                     <Header as='h4' content='Wor Order Status' color='teal' />
@@ -78,8 +60,6 @@ export default function ReconfigureForm() {
                                     <MyDateInput name='startDate' placeholderText='Start Date' />
                                     <Header as='h4' content='Product Line / Family' color='teal' />
                                     <MySelectInput name='prodLine' placeholder='Product Line / Family' options={ProdLineOptions} />
-                                    <Header as='h4' content='Class' color='teal' />
-                                    <MySelectInput name='class' placeholder='Class' options={ClassOptions} />
                                 </Grid.Column>
                                 <Grid.Column width={4}>
                                     <Header as='h4' content='Released Date' color='teal' />
@@ -88,8 +68,6 @@ export default function ReconfigureForm() {
                                     <MyTextInput name='assembly' placeholder='Assembly' />
                                     <Header as='h4' content='Remaining Quantity' color='teal' />
                                     <MyTextInput name='pendingQuantity' type='number' placeholder='Remaining Quantity' />
-                                    <Header as='h4' content='Parent WO Number' color='teal' />
-                                    <MyTextInput name='parentWONumber' placeholder='Parent WO Number' />
                                 </Grid.Column>
                                 <Grid.Column width={4}>
                                     <Header as='h4' content='Order Type' color='teal' />
@@ -98,27 +76,41 @@ export default function ReconfigureForm() {
                                     <MyTextInput name='completedQuantity' type='number' placeholder='Completed Quantity' />
                                     <Header as='h4' content='Work Order Age' color='teal' />
                                     <MyTextInput name='aged' type='number' placeholder='Work Order Age' />
-                                    <Header as='h4' content='Organization' color='teal' />
-                                    <MySelectInput name='organization' placeholder='Organization' options={OrganizationOptions} />
-                                </Grid.Column>
-                                <Grid.Column width={4}>
-                                    <Header as='h4' content='Hot Order' color='teal' />
-                                    <Checkbox slider onChange={(e, { checked }) => setHotOrder(checked!)} />
-                                </Grid.Column>
-                                <Grid.Column width={12}>
-                                    <Button.Group floated='right'>
-                                        <Button disabled={isSubmitting || !dirty || !isValid} loading={isSubmitting} floated='right' positive type='submit' content='Save' />
-                                        <Button.Or />
-                                        <Button disabled={isSubmitting || !dirty || !isValid} loading={isSubmitting} floated='right' primary type='submit' content='Release' />
-                                        <Button.Or />
-                                        <Button floated='right' type='button' content='Cancel' onClick={() => resetForm} />
-                                    </Button.Group>
                                 </Grid.Column>
                             </Grid>
+                            <Segment clearing>
+                                <Grid>
+                                    <Grid.Column width={5}>
+                                        <Header as='h4' content='Order Processing Line' color='teal' />
+                                        <MyTextInput name='orderProcessingLine' placeholder='Order Processing Line' />
+                                        <Header as='h4' content='Expected Completion Date' color='teal' />
+                                        <MyDateInput name='expectedCompletionDate' placeholderText='Expected Completion Date' />
+                                    </Grid.Column>
+                                    <Grid.Column width={5}>
+                                        <Header as='h4' content='Reconfiguration Status' color='teal' />
+                                        <MySelectInput name='reconfigurationStatus' placeholder='Reconfiguration Status' options={ReconfigurationStatusOptions} />
+                                        <Header as='h4' content='Order Split Child WO Created' color='teal' />
+                                        <MyTextInput name='orderSplitChildWOCreated' placeholder='Order Split Child WO Created' />
+                                    </Grid.Column>
+                                    <Grid.Column width={6}>
+                                        <Header as='h4' content='Help Required From' color='teal' />
+                                        <MyTextInput name='helpRequiredFrom' placeholder='Help Required From' />
+                                        <Header as='h4' content='Additional Comments' color='teal' />
+                                        <MyTextInput name='additionalComments' placeholder='Additional Comments' />
+                                    </Grid.Column>
+                                    <Grid.Column width={16} textAlign='center'>
+                                        <Button.Group>
+                                            <Button disabled={!isValid || !dirty || isSubmitting} loading={isSubmitting} positive content='Save' type='submit' fluid />
+                                            <Button.Or />
+                                            <Button disabled={isSubmitting} content='Close' type='button' fluid onClick={modalStore.closeModal} />
+                                        </Button.Group>
+                                    </Grid.Column>
+                                </Grid>
+                            </Segment>
                         </Form>
                     )}
                 </Formik>
             </Segment>
         </>
     )
-}
+})

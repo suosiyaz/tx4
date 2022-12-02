@@ -9,7 +9,7 @@ import ReconfigureWorkOrder from './reconfigure/ReconfigureWorkOrder';
 export default observer(function WorkOrdersTable() {
     const { workOrderStore, modalStore } = useStore();
 
-    const { workOrders, workOrderRegistery, loadWorkOrders, setPagingParams, pagination, workOrderToEdit, setWorkOrderToEdit } = workOrderStore;
+    const { workOrders, workOrderRegistery, loadWorkOrders, setPagingParams, pagination, loadWorkOrder } = workOrderStore;
     const [loadingNext, setLoadingNext] = useState(false);
 
     function handleGetNext(page: any) {
@@ -51,7 +51,7 @@ export default observer(function WorkOrdersTable() {
                 </Table.Header>
                 <Table.Body>
                     {workOrders.map(workOrder => (
-                        <Table.Row active={workOrder === workOrderToEdit} onDoubleClick={() => {setWorkOrderToEdit(workOrder); modalStore.openModal(<ReconfigureWorkOrder />, 'fullscreen')}} key={workOrder.id}>
+                        <Table.Row onDoubleClick={() => {loadWorkOrder(workOrder.id); modalStore.openModal(<ReconfigureWorkOrder />, 'fullscreen')}} key={workOrder.id}>
                             <Table.Cell>{workOrder.job}</Table.Cell>
                             <Table.Cell>{workOrder.type}</Table.Cell>
                             <Table.Cell>{workOrder.assembly}</Table.Cell>

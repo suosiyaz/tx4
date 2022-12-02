@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using API.Extensions;
 using API.Middleware;
 using API.SignalR;
@@ -26,7 +27,7 @@ namespace API
             }).AddFluentValidation(config =>
             {
                 config.RegisterValidatorsFromAssemblyContaining<Create>();
-            });
+            }).AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
             services.AddApplicationServices(_config);
             services.AddIdentityServices(_config);
         }
@@ -45,6 +46,10 @@ namespace API
 
             app.UseRouting();
 
+            app.UseDefaultFiles();
+
+            app.UseStaticFiles();
+
             app.UseCors("CorsPolicy");
 
             app.UseAuthentication();
@@ -55,6 +60,7 @@ namespace API
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<NewsHub>("/news");
+                endpoints.MapFallbackToController("Index", "Fallback");
             });
         }
     }

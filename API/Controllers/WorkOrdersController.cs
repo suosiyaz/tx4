@@ -41,6 +41,12 @@ namespace API.Controllers
             workOrder.Id = id;
             return HandleResult(await Mediator.Send(new Edit.Command {WorkOrder = workOrder}));
         }
+        [HttpPut("reconfigure/{id}")]
+        public async Task<IActionResult> ReconfigureWorkOrder(Guid id, WorkOrderReconfigureDto workOrder)
+        {
+            workOrder.Id = id;
+            return HandleResult(await Mediator.Send(new Reconfigure.Command {WorkOrder = workOrder}));
+        }
 
         [Authorize(Policy = "IsZebra")]
         [HttpDelete("{id}")]

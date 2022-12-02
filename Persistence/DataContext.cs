@@ -11,8 +11,8 @@ namespace Persistence
         }
 
         public DbSet<WorkOrder> WorkOrders { get; set; }
+        public DbSet<WorkOrderHistory> WorkOrderHistories { get; set; }
         public DbSet<HotNews> HotNewses { get; set; }
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
