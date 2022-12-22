@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
-import { Button, Checkbox, Form, Grid, Header, Segment } from 'semantic-ui-react';
+import { Button, Checkbox, Form, Grid, Header, Icon, Popup, Segment } from 'semantic-ui-react';
 import { useStore } from '../../../app/stores/store';
 import { v4 as uuid } from 'uuid';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
@@ -15,10 +15,11 @@ import { OrderTypeOptions } from '../../../app/common/options/orderTypeOptions';
 import { ClassOptions } from '../../../app/common/options/classOptions';
 import { OrganizationOptions } from '../../../app/common/options/organizationOptions';
 import SavedWorkOrdersTable from './SavedWorkOrdersTable';
+import Dropzone from '../../../app/common/upload/DropZone';
 
 export default observer(function WorkOrderForm() {
-    const { workOrderStore } = useStore();
-    const { createWorkOrder, updateWorkOrder, selectedSavedWorkOrder, loadingInitial } = workOrderStore;
+    const { workOrderStore, modalStore } = useStore();
+    const { createWorkOrder, uploadWorkOrders, updateWorkOrder, selectedSavedWorkOrder, loadingInitial, clearSelectedSavedWorkOrders } = workOrderStore;
     const [status, setStatus] = useState<string>('Saved');
     const [hotOrder, setHotOrder] = useState<boolean>(false);
 
@@ -54,25 +55,34 @@ export default observer(function WorkOrderForm() {
         }
     }
 
+    function uploadFile(file: File) {
+        uploadWorkOrders(file).then(() => {
+            modalStore.closeModal();
+        });
+    }
+
     if (loadingInitial) return <LoadingComponent content='Loading work order...' />
 
     return (
         <>
-            <Segment
-                textAlign='center'
+            <Segment.Group
                 attached='top'
-                inverted
-                color='teal'
+                horizontal
                 style={{ border: 'none' }}
             >
-                <Header>Create or Upload Work Order</Header>
-            </Segment>
+                <Segment color='teal' inverted textAlign='center' style={{ border: 'none', width: '95%' }}>
+                    <Header>Create or Upload Work Order</Header>
+                </Segment>
+                <Segment color='teal' inverted textAlign='left' style={{ border: 'none', width: '5%' }}>
+                    <Popup trigger={<Icon name='upload' style={{ cursor: 'pointer'}} size='large' onClick={() => { modalStore.openModal(<Dropzone uploadFile={uploadFile} />, 'tiny') }} />} inverted position='top right' content='Upload excel'></Popup>
+                </Segment>
+            </Segment.Group>
             <Segment clearing attached>
                 <Formik
                     validationSchema={validationSchema}
                     enableReinitialize
                     initialValues={selectedSavedWorkOrder ? Object.assign(WorkOrderFormValues, selectedSavedWorkOrder) : new WorkOrderFormValues()}
-                    onSubmit={(values, {resetForm}) => {handleFormSubmit(values); resetForm();}}>
+                    onSubmit={(values, { resetForm }) => { handleFormSubmit(values); resetForm(); }}>
                     {({ handleSubmit, isValid, isSubmitting, dirty, resetForm, setFieldValue }) => (
                         <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
                             <Grid>
@@ -110,7 +120,7 @@ export default observer(function WorkOrderForm() {
                                 </Grid.Column>
                                 <Grid.Column width={4}>
                                     <Header as='h4' content='Hot Order' color='teal' />
-                                    <Checkbox name='hotOrder' slider checked={hotOrder} onChange={(e, {checked}) => {setHotOrder(checked!); setFieldValue('hotOrder', checked)}} />
+                                    <Checkbox name='hotOrder' slider checked={hotOrder} onChange={(e, { checked }) => { setHotOrder(checked!); setFieldValue('hotOrder', checked) }} />
                                 </Grid.Column>
                                 <Grid.Column width={12}>
                                     <Button.Group floated='right'>
@@ -118,7 +128,7 @@ export default observer(function WorkOrderForm() {
                                         <Button.Or />
                                         <Button disabled={isSubmitting || !dirty || !isValid} loading={isSubmitting} floated='right' primary type='submit' content='Release' onClick={() => setStatus('Released')} />
                                         <Button.Or />
-                                        <Button floated='right' type='button' content='Cancel' onClick={() => resetForm} />
+                                        <Button floated='right' type='button' content='Cancel' onClick={() => { clearSelectedSavedWorkOrders(); setHotOrder(false); resetForm(); }} />
                                     </Button.Group>
                                 </Grid.Column>
                             </Grid>

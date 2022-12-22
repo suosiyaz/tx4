@@ -11,6 +11,7 @@ import { ProdLineOptions } from '../../../../app/common/options/prodLineOptions'
 import { StatusOptions } from '../../../../app/common/options/statusOptions';
 import { ReconfigurationStatusOptions } from '../../../../app/common/options/reconfigurationStatusOptions';
 import { observer } from 'mobx-react-lite';
+import { BoolOptions } from '../../../../app/common/options/boolOptions';
 
 export default observer(function ReconfigureForm() {
     const { workOrderStore, modalStore } = useStore();
@@ -90,7 +91,7 @@ export default observer(function ReconfigureForm() {
                                         <Header as='h4' content='Reconfiguration Status' color='teal' />
                                         <MySelectInput name='reconfigurationStatus' placeholder='Reconfiguration Status' options={ReconfigurationStatusOptions} />
                                         <Header as='h4' content='Order Split Child WO Created' color='teal' />
-                                        <MyTextInput name='orderSplitChildWOCreated' placeholder='Order Split Child WO Created' />
+                                        <MySelectInput name='orderSplitChildWOCreated' placeholder='Order Split Child WO Created' options={BoolOptions} />
                                     </Grid.Column>
                                     <Grid.Column width={6}>
                                         <Header as='h4' content='Help Required From' color='teal' />

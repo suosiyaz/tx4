@@ -44,7 +44,7 @@ namespace API.Controllers
                 return ValidationProblem();
             }
 
-            if (user.Team.ToLower() != "zebra" && user.UserRole.ToLower() == "admin")
+            if (user.Team.ToLower() != "parent" && user.UserRole.ToLower() == "admin")
             {
                 ModelState.AddModelError("userRole", "The user cannot be made Admin");
                 return ValidationProblem();
@@ -56,7 +56,7 @@ namespace API.Controllers
         public async Task<IActionResult> EditUser(string userName, UserUpdateDto user)
         {
 
-            if (user.Team.ToLower() != "zebra" && user.UserRole.ToLower() == "admin")
+            if (user.Team.ToLower() != "parent" && user.UserRole.ToLower() == "admin")
             {
                 ModelState.AddModelError("userRole", "The user cannot be made Admin");
                 return ValidationProblem();

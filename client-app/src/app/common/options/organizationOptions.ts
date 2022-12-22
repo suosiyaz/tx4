@@ -1,7 +1,7 @@
 export const OrganizationOptions = [
-    {text: 'TX1', value: 'TX1'},
-    {text: 'TX2', value: 'TX2'},
-    {text: 'TX3', value: 'TX3'},
-    {text: 'TX4', value: 'TX4'},
-    {text: 'TX5', value: 'TX5'}
+    {text: 'Org1', value: 'Org1'},
+    {text: 'Org2', value: 'Org2'},
+    {text: 'Org3', value: 'Org3'},
+    {text: 'Org4', value: 'Org4'},
+    {text: 'Org5', value: 'Org5'}
 ]

@@ -6,6 +6,7 @@ import MySelectInput from '../../../app/common/form/MySelectInput';
 import MyTextInput from '../../../app/common/form/MyTextInput';
 import { ClassOptions } from '../../../app/common/options/classOptions';
 import { OrderTypeOptions } from '../../../app/common/options/orderTypeOptions';
+import { ProdLineOptions } from '../../../app/common/options/prodLineOptions';
 import { StatusOptions } from '../../../app/common/options/statusOptions';
 import { useStore } from '../../../app/stores/store';
 
@@ -22,6 +23,7 @@ export default observer(function WorkOrderSearch() {
         setPredicate('completionDateTo', values.completionDateTo);
         setPredicate('class', values.class);
         setPredicate('assembly', values.assembly);
+        setPredicate('prodLine', values.prodLine);
         loadWorkOrders();
     }
 
@@ -34,7 +36,8 @@ export default observer(function WorkOrderSearch() {
         completionDateFrom: predicate.has('completionDateFrom') ? new Date(predicate.get('completionDateFrom')) : null,
         completionDateTo: predicate.has('completionDateTo') ? new Date(predicate.get('completionDateTo')) : null,
         class: predicate.has('class') ? predicate.get('class') : '',
-        assembly: predicate.has('assembly') ? predicate.get('assembly') : ''
+        assembly: predicate.has('assembly') ? predicate.get('assembly') : '',
+        prodLine: predicate.has('prodLine') ? predicate.get('prodLine') : ''
     }
 
     return (
@@ -74,7 +77,10 @@ export default observer(function WorkOrderSearch() {
                             <Grid.Column width={4}>
                                 <MyTextInput name='assembly' placeholder='Assembly' />
                             </Grid.Column>
-                            <Grid.Column width={8}>
+                            <Grid.Column width={4}>
+                                <MySelectInput name='prodLine' placeholder='Product Line' options={ProdLineOptions} />
+                            </Grid.Column>
+                            <Grid.Column width={4}>
                                 <Button.Group floated='right'>
                                     <Button disabled={isSubmitting || !dirty || !isValid} loading={isSubmitting} positive type='submit' content='Search' />
                                     <Button.Or />

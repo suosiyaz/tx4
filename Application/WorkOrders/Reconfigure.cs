@@ -44,12 +44,24 @@ namespace Application.WorkOrders
                 history.WorkOrder = workOrder;
                 foreach (var change in changes)
                 {
-                    var entityName = change.Entity.GetType().Name;
                     int count = 0;
                     foreach (var prop in change.OriginalValues.Properties)
                     {
-                        var originalValue = change.OriginalValues[prop] == null ? null : change.OriginalValues[prop].ToString();
-                        var currentValue = change.CurrentValues[prop] == null ? null : change.CurrentValues[prop].ToString();
+                        string originalValue = null;
+                        string currentValue = null;
+                        var check = prop.GetType();
+                        var check1 = check.Equals(typeof(DateTime));
+                        string[] dateColumns = {"DateReleased", "StartDate", "CompletionDate", "ScheduleToRelease", "ExpectedCompletionDate"};
+                        if (dateColumns.Any(d => d == prop.Name))
+                        {
+                            originalValue = change.OriginalValues[prop] == null ? null : DateTime.Parse(change.OriginalValues[prop].ToString()).Date.ToString();
+                            currentValue = change.CurrentValues[prop] == null ? null : DateTime.Parse(change.CurrentValues[prop].ToString()).Date.ToString();
+                        }
+                        else
+                        {
+                            originalValue = change.OriginalValues[prop] == null ? null : change.OriginalValues[prop].ToString();
+                            currentValue = change.CurrentValues[prop] == null ? null : change.CurrentValues[prop].ToString();
+                        }
                         if (originalValue != currentValue)
                         {
                             if (count == 0) history.CourseOfAction = prop.Name.ToString() + ": changed from '" + originalValue + "' to '" + currentValue + "'";

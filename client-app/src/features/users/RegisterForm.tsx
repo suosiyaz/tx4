@@ -81,7 +81,7 @@ export default observer(function RegisterForm() {
                         </Grid.Column>
                         <Grid.Column width={4}>
                             <Button.Group floated='right'>
-                                <Button disabled={isSubmitting} content='Cancel' type='button' fluid onClick={clearSelectedUser} />
+                                <Button disabled={isSubmitting} content='Cancel' type='button' fluid onClick={() => {clearSelectedUser(); setIsActive(true) }} />
                                 <Button.Or />
                                 <Button disabled={!isValid || !dirty || isSubmitting} loading={isSubmitting} positive content='Register' type='submit' fluid />
                             </Button.Group>

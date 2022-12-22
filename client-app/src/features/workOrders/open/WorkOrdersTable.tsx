@@ -24,11 +24,6 @@ export default observer(function WorkOrdersTable() {
 
     return (
         <>
-            <Grid columns={1}>
-                <Grid.Column>
-                    <Pagination activePage={pagination ? pagination.currentPage : 1} totalPages={pagination ? pagination.totalPages : 1} onPageChange={(event, data) => handleGetNext(data.activePage)} />
-                </Grid.Column>
-            </Grid>
             <Table compact='very' size='small' singleLine color='teal'>
                 <Table.Header>
                     <Table.Row>
@@ -51,14 +46,14 @@ export default observer(function WorkOrdersTable() {
                 </Table.Header>
                 <Table.Body>
                     {workOrders.map(workOrder => (
-                        <Table.Row onDoubleClick={() => {loadWorkOrder(workOrder.id); modalStore.openModal(<ReconfigureWorkOrder />, 'fullscreen')}} key={workOrder.id}>
+                        <Table.Row negative={workOrder.hotOrder} onDoubleClick={() => { loadWorkOrder(workOrder.id); modalStore.openModal(<ReconfigureWorkOrder />, 'fullscreen') }} key={workOrder.id}>
                             <Table.Cell>{workOrder.job}</Table.Cell>
                             <Table.Cell>{workOrder.type}</Table.Cell>
                             <Table.Cell>{workOrder.assembly}</Table.Cell>
                             <Table.Cell>{workOrder.class}</Table.Cell>
-                            <Table.Cell>{format(workOrder.dateReleased!, 'dd MMM yyyy')}</Table.Cell>
-                            <Table.Cell>{format(workOrder.startDate!, 'dd MMM yyyy')}</Table.Cell>
-                            <Table.Cell>{format(workOrder.completionDate!, 'dd MMM yyyy')}</Table.Cell>
+                            <Table.Cell>{workOrder.dateReleased ? format(workOrder.dateReleased, 'dd MMM yyyy') : ''}</Table.Cell>
+                            <Table.Cell>{workOrder.startDate ? format(workOrder.startDate, 'dd MMM yyyy') : ''}</Table.Cell>
+                            <Table.Cell>{workOrder.completionDate ? format(workOrder.completionDate, 'dd MMM yyyy') : ''}</Table.Cell>
                             <Table.Cell>{workOrder.orderQuantity}</Table.Cell>
                             <Table.Cell>{workOrder.completedQuantity}</Table.Cell>
                             <Table.Cell>{workOrder.pendingQuantity}</Table.Cell>
@@ -73,6 +68,11 @@ export default observer(function WorkOrdersTable() {
                     ))}
                 </Table.Body>
             </Table>
+            <Grid columns={1}>
+                <Grid.Column>
+                    <Pagination activePage={pagination ? pagination.currentPage : 1} totalPages={pagination ? pagination.totalPages : 1} onPageChange={(event, data) => handleGetNext(data.activePage)} />
+                </Grid.Column>
+            </Grid>
             <Loader active={loadingNext} />
         </>
     )

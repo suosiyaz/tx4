@@ -88,24 +88,22 @@ export default observer(function WorkOrdeCharts() {
             menuItem: 'All', render: () =>
                 <>
                     <Grid>
-                        <Grid.Column width={5}>
+                        <Grid.Column width={8}>
                             <BarChart labels={WorkOrdersReleasedDailyLabels} reportData={WorkOrdersReleasedDailyData} reportLabel='Work Orders Released' titleText='Work Orders Released / Day' />
                         </Grid.Column>
-                        <Grid.Column width={5}>
+                        <Grid.Column width={8}>
                             <BarChart labels={HotWorkOrdersDailyLabels} reportData={HotWorkOrdersDailyData} reportLabel='Hot Work Orders' titleText='Hot Work Orders - Daily' />
                         </Grid.Column>
-                        <Grid.Column width={5}>
+                        <Grid.Column width={8}>
                             <BarChart labels={WorkOrdersCompletedLabels} reportData={WorkOrdersCompletedData} reportLabel='Work Orders Completed' titleText='Work Orders Completed / Day' />
                         </Grid.Column>
-                    </Grid>
-                    <Grid>
-                        <Grid.Column width={5}>
+                        <Grid.Column width={8}>
                             <BarChart labels={WorkOrdersPastDueLabels} reportData={WorkOrdersPastDuedData} reportLabel='Work Orders Past Due' titleText='Work Orders Past Due' />
                         </Grid.Column>
-                        <Grid.Column width={5}>
+                        <Grid.Column width={8}>
                             <BarChart labels={WorkOrdersInProgressLabels} reportData={WorkOrdersInProgressData} reportLabel='Work Orders In Progress' titleText='Work Orders In Progress' />
                         </Grid.Column>
-                        <Grid.Column width={5}>
+                        <Grid.Column width={8}>
                             <BarChart labels={WorkOrdersProdLineLabels} reportData={WorkOrdersProdLineData} reportLabel='Work Orders / ProdLine' titleText='Work Orders / ProdLine' />
                         </Grid.Column>
                     </Grid>
@@ -115,7 +113,7 @@ export default observer(function WorkOrdeCharts() {
             menuItem: 'Work Orders Daily', render: () =>
                 <Grid>
                     <Grid.Column width={16}>
-                    <BarChart labels={WorkOrdersReleasedDailyLabels} reportData={WorkOrdersReleasedDailyData} reportLabel='Work Orders Released' titleText='Work Orders Released / Day' />
+                        <BarChart labels={WorkOrdersReleasedDailyLabels} reportData={WorkOrdersReleasedDailyData} reportLabel='Work Orders Released' titleText='Work Orders Released / Day' />
                     </Grid.Column>
                 </Grid>
         },
@@ -123,7 +121,7 @@ export default observer(function WorkOrdeCharts() {
             menuItem: 'Hot Work Orders', render: () =>
                 <Grid>
                     <Grid.Column width={16}>
-                    <BarChart labels={HotWorkOrdersDailyLabels} reportData={HotWorkOrdersDailyData} reportLabel='Hot Work Orders' titleText='Hot Work Orders - Daily' />
+                        <BarChart labels={HotWorkOrdersDailyLabels} reportData={HotWorkOrdersDailyData} reportLabel='Hot Work Orders' titleText='Hot Work Orders - Daily' />
                     </Grid.Column>
                 </Grid>
         },
@@ -139,7 +137,7 @@ export default observer(function WorkOrdeCharts() {
             menuItem: 'Work Orders Past Due', render: () =>
                 <Grid>
                     <Grid.Column width={16}>
-                    <BarChart labels={WorkOrdersPastDueLabels} reportData={WorkOrdersPastDuedData} reportLabel='Work Orders Past Due' titleText='Work Orders Past Due' />
+                        <BarChart labels={WorkOrdersPastDueLabels} reportData={WorkOrdersPastDuedData} reportLabel='Work Orders Past Due' titleText='Work Orders Past Due' />
                     </Grid.Column>
                 </Grid>
         },
@@ -147,7 +145,7 @@ export default observer(function WorkOrdeCharts() {
             menuItem: 'Work Orders In Progress / Age', render: () =>
                 <Grid>
                     <Grid.Column width={16}>
-                    <BarChart labels={WorkOrdersInProgressLabels} reportData={WorkOrdersInProgressData} reportLabel='Work Orders In Progress' titleText='Work Orders In Progress' />
+                        <BarChart labels={WorkOrdersInProgressLabels} reportData={WorkOrdersInProgressData} reportLabel='Work Orders In Progress' titleText='Work Orders In Progress' />
                     </Grid.Column>
                 </Grid>
         },
@@ -155,7 +153,7 @@ export default observer(function WorkOrdeCharts() {
             menuItem: 'Work Orders / ProdLine', render: () =>
                 <Grid>
                     <Grid.Column width={16}>
-                    <BarChart labels={WorkOrdersProdLineLabels} reportData={WorkOrdersProdLineData} reportLabel='Work Orders / ProdLine' titleText='Work Orders / ProdLine' />
+                        <BarChart labels={WorkOrdersProdLineLabels} reportData={WorkOrdersProdLineData} reportLabel='Work Orders / ProdLine' titleText='Work Orders / ProdLine' />
                     </Grid.Column>
                 </Grid>
         }

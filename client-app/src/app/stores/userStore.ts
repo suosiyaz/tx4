@@ -23,7 +23,7 @@ export default class UserStore {
     }
 
     get isZebra() {
-        return this.user?.team.toLowerCase() === 'zebra' && (this.user?.userRole.toLowerCase() === 'admin' || this.user?.userRole.toLowerCase() === 'planner');
+        return this.user?.team.toLowerCase() === 'parent' && (this.user?.userRole.toLowerCase() === 'admin' || this.user?.userRole.toLowerCase() === 'planner');
     }
 
     login = async (creds: UserLogin) => {
@@ -80,9 +80,10 @@ export default class UserStore {
     }
 
     loadUsers = async (searchKey: string) => {
+        this.usersRegistery.clear();
         try {
-            this.usersRegistery.clear();
             const users = await agent.Account.list(searchKey);
+            console.log(users);
             users.forEach(user => {
                 this.setUser(user);
             });

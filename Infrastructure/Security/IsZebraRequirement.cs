@@ -29,7 +29,7 @@ namespace Infrastructure.Security
 
             var user = _dbContext.Users
                 .AsNoTracking()
-                .SingleOrDefaultAsync(x => x.UserName == userId && x.Team.ToLower() == "zebra" && (x.UserRole.ToLower() == "admin" || x.UserRole.ToLower() == "planner")).Result;
+                .SingleOrDefaultAsync(x => x.UserName == userId && x.Team.ToLower() == "parent" && (x.UserRole.ToLower() == "admin" || x.UserRole.ToLower() == "planner")).Result;
 
             if (user == null) return Task.CompletedTask;
 

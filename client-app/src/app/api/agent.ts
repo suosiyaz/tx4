@@ -78,7 +78,14 @@ const WorkOrders = {
     update: (workOrder: WorkOrderFormValues) => requests.put<void>(`workOrders/${workOrder.id}`, workOrder),
     reconfigure: (workOrder: WorkOrder) => requests.put<void>(`workOrders/reconfigure/${workOrder.id}`, workOrder),
     delete: (id: string) => requests.delete<void>(`workOrders/${id}`),
-    report: (reportName: string) => requests.get<Report[]>(`workOrders/report?reportName=${reportName}`)
+    report: (reportName: string) => requests.get<Report[]>(`workOrders/report?reportName=${reportName}`),
+    uploadWorkOrders: (file: File) => {
+        let formData = new FormData();
+        formData.append('File', file);
+        return axios.post<void>('workOrders/upload', formData, {
+            headers: { 'Content-type': 'multipart/form-data' }
+        })
+    }
 }
 
 const Account = {

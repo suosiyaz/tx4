@@ -18,5 +18,6 @@ namespace Application.WorkOrders
         public string Type { get; set; }
         public string Class { get; set; }
         public string Assembly { get; set; }
+        public string ProdLine { get; set; }
     }
 }

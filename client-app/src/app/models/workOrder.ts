@@ -37,7 +37,7 @@ export interface WorkOrder {
 
   export class WorkOrderFormValues {
     id: string = '';
-    job: number | undefined = undefined;
+    job: number = 0;
     type: string = '';
     assembly: string = '';
     class: string = '';
@@ -45,13 +45,13 @@ export interface WorkOrder {
     startDate: Date | undefined = undefined;
     completionDate: Date | undefined = undefined;
     scheduleToRelease: Date | undefined = undefined;
-    orderQuantity: number | undefined = undefined;
+    orderQuantity: number = 0;
     completedQuantity: number | undefined = undefined;
-    pendingQuantity: number | undefined = undefined;
+    pendingQuantity: number = 0;
     orderStatus: string = '';
     prodLine: string = '';
     organization: string = '';
-    parentJob: number | undefined = undefined;
+    parentJob: number = 0;
     hotOrder: boolean = false;
 
     constructor(workOrder?: WorkOrderFormValues) {

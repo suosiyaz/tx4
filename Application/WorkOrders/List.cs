@@ -67,6 +67,10 @@ namespace Application.WorkOrders
                 {
                     query = query.Where(x => x.CompletionDate <= request.Params.CompletionDateTo);
                 }
+                if (!String.IsNullOrEmpty(request.Params.ProdLine))
+                {
+                    query = query.Where(x => x.ProdLine == request.Params.ProdLine);
+                }
 
                 return Result<PagedList<WorkOrderDto>>.Success(await PagedList<WorkOrderDto>.CreateAsync(query, request.Params.PageNumber, request.Params.PageSize));
             }

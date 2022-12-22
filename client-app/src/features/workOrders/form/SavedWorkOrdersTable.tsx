@@ -51,9 +51,9 @@ export default observer(function WorkOrdersTable() {
                             <Table.Cell>{workOrder.assembly}</Table.Cell>
                             <Table.Cell>{workOrder.class}</Table.Cell>
                             <Table.Cell>{workOrder.organization}</Table.Cell>
-                            <Table.Cell>{format(workOrder.dateReleased!, 'dd MMM yyyy')}</Table.Cell>
-                            <Table.Cell>{format(workOrder.startDate!, 'dd MMM yyyy')}</Table.Cell>
-                            <Table.Cell>{format(workOrder.completionDate!, 'dd MMM yyyy')}</Table.Cell>
+                            <Table.Cell>{workOrder.dateReleased ? format(workOrder.dateReleased, 'dd MMM yyyy') : ''}</Table.Cell>
+                            <Table.Cell>{workOrder.startDate ? format(workOrder.startDate, 'dd MMM yyyy') : ''}</Table.Cell>
+                            <Table.Cell>{workOrder.completionDate ? format(workOrder.completionDate, 'dd MMM yyyy') : ''}</Table.Cell>
                             <Table.Cell>{workOrder.orderQuantity}</Table.Cell>
                             <Table.Cell>{workOrder.orderStatus}</Table.Cell>
                             <Table.Cell>{workOrder.prodLine}</Table.Cell>

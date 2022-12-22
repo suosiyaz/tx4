@@ -38,7 +38,7 @@ export default observer(function BarChart({titleText, labels = ['a','a','a','a',
             y: {
                 stacked: true,
             },
-        },
+        }
     };
     const data = {
         labels,
@@ -53,6 +53,6 @@ export default observer(function BarChart({titleText, labels = ['a','a','a','a',
     };
 
     return (
-        <Bar options={options} data={data} />
+        <Bar height={100} options={options} data={data} />
     )
 })

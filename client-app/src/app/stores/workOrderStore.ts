@@ -20,6 +20,7 @@ export default class WorkOrderStore {
     WorkOrdersPastDue: Report[] = [];
     WorkOrdersInProgress: Report[] = [];
     WorkOrdersProdLine: Report[] = [];
+    uploading = false;
 
     constructor() {
         makeAutoObservable(this);
@@ -35,6 +36,10 @@ export default class WorkOrderStore {
 
     resetParams = () => {
         this.predicate.forEach((value, key) => this.predicate.delete(key));
+    }
+
+    clearSelectedSavedWorkOrders = () => {
+        this.selectedSavedWorkOrder = undefined;
     }
 
     get axiosParams() {
@@ -67,6 +72,7 @@ export default class WorkOrderStore {
         this.setLoadingInitial(true);
         this.workOrderRegistery.clear();
         try {
+            console.log(this.axiosParams);
             const result = await agent.WorkOrders.list(this.axiosParams);
             result.data.forEach(workOrder => {
                 this.setWorkOrder(workOrder);
@@ -141,17 +147,29 @@ export default class WorkOrderStore {
         }
     }
 
+    uploadWorkOrders = async (file: File) => {
+        this.uploading = true;
+        try {
+            await agent.WorkOrders.uploadWorkOrders(file);
+            this.loadSavedWorkOrders();
+            this.uploading = false;
+        } catch (error) {
+            console.log(error);
+            this.uploading = false;
+        }
+    }
+
     private setWorkOrder = (workOrder: WorkOrder) => {
-        workOrder.dateReleased = new Date(workOrder.dateReleased!);
-        workOrder.startDate = new Date(workOrder.startDate!);
-        workOrder.completionDate = new Date(workOrder.completionDate!);
+        workOrder.dateReleased = workOrder.dateReleased ? new Date(workOrder.dateReleased) : undefined;
+        workOrder.startDate = workOrder.startDate ? new Date(workOrder.startDate) : undefined;
+        workOrder.completionDate = workOrder.completionDate ? new Date(workOrder.completionDate) : undefined;
         this.workOrderRegistery.set(workOrder.id, workOrder);
     }
 
     private setSavedWorkOrder = (workOrder: WorkOrder) => {
-        workOrder.dateReleased = new Date(workOrder.dateReleased!);
-        workOrder.startDate = new Date(workOrder.startDate!);
-        workOrder.completionDate = new Date(workOrder.completionDate!);
+        workOrder.dateReleased = workOrder.dateReleased ? new Date(workOrder.dateReleased) : undefined;
+        workOrder.startDate = workOrder.startDate ? new Date(workOrder.startDate) : undefined;
+        workOrder.completionDate = workOrder.completionDate ? new Date(workOrder.completionDate) : undefined;
         this.savedWorkOrderRegistery.set(workOrder.id, workOrder);
     }
 
@@ -202,6 +220,7 @@ export default class WorkOrderStore {
     }
 
     reconfigureWorkOrder = async (workOrder: WorkOrder) => {
+        console.log(workOrder);
         try {
             await agent.WorkOrders.reconfigure(workOrder);
             runInAction(() => {

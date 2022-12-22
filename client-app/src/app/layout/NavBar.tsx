@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import { Link, NavLink } from 'react-router-dom';
-import { Container, Dropdown, Menu, Image } from 'semantic-ui-react';
+import { Container, Dropdown, Menu, Image, Icon } from 'semantic-ui-react';
 import { useStore } from '../stores/store';
 
 export default observer(function NavBar() {
@@ -11,8 +11,9 @@ export default observer(function NavBar() {
             <Menu inverted fixed='top'>
                 <Container>
                     <Menu.Item as={NavLink} to='/' exact header>
-                        <img src='/assets/logo.png' alt='logo' style={{ marginRight: '10px' }} />
-                        TX4 - DC Operations
+                        {/* <img src='/assets/logo.png' alt='logo' style={{ marginRight: '10px', height: '40px', width: '100px' }} /> */}
+                        <Icon size='big' name='building outline' style={{ marginRight: 12 }} />
+                        <span style={{ fontWeight: 'bold', fontSize: 'large' }}>DISTRIBUTION CENTER OPERATIONS (DC - OPS)</span>
                     </Menu.Item>
                     <Menu.Item position='right'>
                         <Image src={'/assets/user.png'} avatar spaced='right' />

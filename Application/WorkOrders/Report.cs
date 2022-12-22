@@ -27,36 +27,63 @@ namespace Application.WorkOrders
             public async Task<Result<List<ReportDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var firstDayOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).Date;
-                var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1).Date; 
+                var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1).Date;
                 var ReportList = new List<ReportDto>();
+                var myData = await _context.WorkOrders.ToListAsync();
+                var query = _context.WorkOrders
+                    .ProjectTo<WorkOrderDto>(_mapper.ConfigurationProvider)
+                    .AsEnumerable();
 
                 if (request.ReportName == "WorkOrdersReleasedDaily")
                 {
-                    ReportList = await _context.WorkOrders.Where(s => s.DateReleased.Value.Date >= firstDayOfMonth && s.DateReleased.Value.Date <= lastDayOfMonth).GroupBy(x => x.DateReleased.Value.Date).Select(x => new ReportDto { ReportLabel = x.Key.ToString(), Quantity = x.Count() }).ToListAsync();
+                    for (int i = 1; i <= DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month); i++)
+                    {
+                        var myDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, i);
+                        ReportList.Add(new ReportDto
+                        {
+                            ReportLabel = myDate.Date.ToString("yyyy-MM-dd"),
+                            Quantity = myData.Where(s => s.DateReleased == null ? false : s.DateReleased.Value.Date == myDate.Date).Count()
+                        });
+                    }
                 }
                 else if (request.ReportName == "WorkOrdersPastDue")
                 {
-                    
-                    var query = _context.WorkOrders
-                    .OrderByDescending(d => d.DateReleased)
-                    .ProjectTo<WorkOrderDto>(_mapper.ConfigurationProvider)
-                    .AsEnumerable();
-                    ReportList = query.Where(s => s.CompletionDate != null && s.DateReleased.Value.Date >= firstDayOfMonth && s.DateReleased.Value.Date <= lastDayOfMonth && s.SLABreached).GroupBy(x => x.DateReleased.Value.Date).Select(x => new ReportDto { ReportLabel = x.Key.ToString("yyyy-MM-dd"), Quantity = x.Count() }).ToList();
+                    for (int i = 1; i <= DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month); i++)
+                    {
+                        var myDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, i);
+                        ReportList.Add(new ReportDto
+                        {
+                            ReportLabel = myDate.Date.ToString("yyyy-MM-dd"),
+                            Quantity = query.Where(s => (s.DateReleased == null ? false : s.DateReleased.Value.Date == myDate.Date) && s.SLABreached).Count()
+                        });
+                    }
                 }
                 else if (request.ReportName == "HotWorkOrdersDaily")
                 {
-                    ReportList = await _context.WorkOrders.Where(s => s.DateReleased.Value.Date >= firstDayOfMonth && s.DateReleased.Value.Date <= lastDayOfMonth && s.HotOrder).GroupBy(x => x.DateReleased.Value.Date).Select(x => new ReportDto { ReportLabel = x.Key.ToString(), Quantity = x.Count() }).ToListAsync();
+                    for (int i = 1; i <= DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month); i++)
+                    {
+                        var myDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, i);
+                        ReportList.Add(new ReportDto
+                        {
+                            ReportLabel = myDate.Date.ToString("yyyy-MM-dd"),
+                            Quantity = myData.Where(s => (s.DateReleased == null ? false : s.DateReleased.Value.Date == myDate.Date) && s.HotOrder).Count()
+                        });
+                    }
                 }
                 else if (request.ReportName == "WorkOrdersCompleted")
                 {
-                    ReportList = await _context.WorkOrders.Where(s => s.CompletionDate.Value.Date >= firstDayOfMonth && s.CompletionDate.Value.Date <= lastDayOfMonth).GroupBy(x => x.CompletionDate.Value.Date).Select(x => new ReportDto { ReportLabel = x.Key.ToString(), Quantity = x.Count() }).ToListAsync();
+                    for (int i = 1; i <= DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month); i++)
+                    {
+                        var myDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, i);
+                        ReportList.Add(new ReportDto
+                        {
+                            ReportLabel = myDate.Date.ToString("yyyy-MM-dd"),
+                            Quantity = myData.Where(s => s.CompletionDate == null ? false : s.CompletionDate.Value.Date == myDate.Date).Count()
+                        });
+                    }
                 }
                 else if (request.ReportName == "WorkOrdersInProgress")
                 {
-                    var query =  _context.WorkOrders
-                    .OrderByDescending(d => d.DateReleased)
-                    .ProjectTo<WorkOrderDto>(_mapper.ConfigurationProvider)
-                    .AsEnumerable();
                     ReportList = query.GroupBy(x => x.Aged).Select(x => new ReportDto { ReportLabel = x.Key.ToString(), Quantity = x.Count() }).ToList();
                 }
                 else if (request.ReportName == "WorkOrdersProdLine")

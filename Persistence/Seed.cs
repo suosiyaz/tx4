@@ -9,10 +9,10 @@ namespace Persistence
         {
             var users = new List<AppUser>
             {
-                new AppUser{FirstName = "Mohammed Shiyas", LastName="Puthankode", UserName ="shiyas", Email = "shiyas@zebra.com", UserRole="admin", Team="Zebra", Organisation="Zebra", IsActive=true},
-                new AppUser{FirstName = "Eswar", LastName="Chavvakula", UserName ="eswar", Email = "eswar@zebra.com", UserRole="admin", Team="Zebra", Organisation="Zebra", IsActive=true},
-                new AppUser{FirstName = "Manesh", LastName="Abraham", UserName ="manesh", Email = "manesh@3pl.com", UserRole="supervisor", Team="3PL", Organisation="3PL", IsActive=true},
-                new AppUser{FirstName = "Lalgy", LastName="Thomas", UserName ="lalgy", Email = "lalgy@3pl.com", UserRole="user", Team="3PL", Organisation="3PL", IsActive=true}
+                new AppUser{FirstName = "Mohammed Shiyas", LastName="Puthankode", UserName ="shiyas", Email = "shiyas@parent.com", UserRole="admin", Team="Parent", Organisation="Org4", IsActive=true},
+                new AppUser{FirstName = "Eswar", LastName="Chavvakula", UserName ="eswar", Email = "eswar@parent.com", UserRole="admin", Team="Parent", Organisation="Org4", IsActive=true},
+                new AppUser{FirstName = "Manesh", LastName="Abraham", UserName ="manesh", Email = "manesh@partner.com", UserRole="supervisor", Team="Partner", Organisation="Org4", IsActive=true},
+                new AppUser{FirstName = "Lalgy", LastName="Thomas", UserName ="lalgy", Email = "lalgy@partner.com", UserRole="user", Team="Partner", Organisation="Org4", IsActive=true}
             };
 
             foreach (var user in users)
@@ -65,10 +65,11 @@ namespace Persistence
 
                 }
                 workOrder.ReconfigurationStatus = i % 3 == 0 ? null : i % 2 == 0 ? "In-Progress" : "Released";
-                workOrder.Organization = i % 3 == 0 ? "Zebra" : i % 2 == 0 ? "3PL" : "Test";
+                int orgRemainder = i % 5;
+                workOrder.Organization = "Org" + orgRemainder;
                 workOrder.ParentJob = i % 10 == 0 ? 123455 + i - 10 : null;
                 workOrder.HotOrder = i % 4 == 3 ? true : false;
-                workOrder.HelpRequiredFrom = i % 5 == 3 ? "Zebra" : i % 5 == 1 ? "3PL" : null;
+                workOrder.HelpRequiredFrom = null;
                 workOrder.OrderSplitChildWOCreated = i % 10 == 0 ? true : false;
                 workOrder.AdditionalComments = null;
                 workOrder.History = new List<WorkOrderHistory>

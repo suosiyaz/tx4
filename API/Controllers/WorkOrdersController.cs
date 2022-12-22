@@ -55,6 +55,13 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Delete.Command {Id = id}));
         }
 
+        [Authorize(Policy = "IsZebra")]
+        [HttpPost("upload")]
+        public async Task<IActionResult> UploadWorkOrders([FromForm] Upload.Command command)
+        {
+            return HandleResult(await Mediator.Send(command));
+        }
+
         [HttpGet("report")]
         public async Task<IActionResult> GetReport(string reportName)
         {

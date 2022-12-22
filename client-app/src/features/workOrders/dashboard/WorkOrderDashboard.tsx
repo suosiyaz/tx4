@@ -13,7 +13,7 @@ export default observer(function WorkOrderDashboard() {
             color='teal'
             style={{ border: 'none' }}
         >
-            <Header>TX4 Reconfiguration - Operations Dashboard</Header>
+            <Header>Reconfiguration - Operations Dashboard</Header>
         </Segment>
             <Segment attached>
                 <WorkOrdeCharts />

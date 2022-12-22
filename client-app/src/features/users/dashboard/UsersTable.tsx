@@ -12,7 +12,7 @@ export default observer(function UsersTable() {
 
     useEffect(() => {
         if (usersRegistery.size < 1) loadUsers('');
-    }, [loadUsers, usersRegistery.size])
+    }, [loadUsers])
 
     return (
         <>
