@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import { toast } from 'react-toastify';
 import { history } from '../..';
 import { PaginatedResult } from '../models/pagination';
+import { QAReview } from '../models/qaReview';
 import { Report } from '../models/report';
 import { User, UserDetail, UserLogin } from '../models/user';
 import { WorkOrder, WorkOrderFormValues } from '../models/workOrder';
@@ -71,7 +72,7 @@ const requests = {
 }
 
 const WorkOrders = {
-    list: (params: URLSearchParams) => axios.get<PaginatedResult<WorkOrder[]>>('workOrders', {params}).then(responseBody),
+    list: (params: URLSearchParams) => axios.get<PaginatedResult<WorkOrder[]>>('workOrders', { params }).then(responseBody),
     listSaved: () => axios.get<WorkOrder[]>('workOrders/saved'),
     details: (id: string) => requests.get<WorkOrder>(`workOrders/${id}`),
     create: (workOrder: WorkOrderFormValues) => requests.post<void>('workOrders', workOrder),
@@ -88,6 +89,75 @@ const WorkOrders = {
     }
 }
 
+const QA = {
+    list: (params: URLSearchParams) => axios.get<WorkOrder[]>('qa', { params }),
+    review: (review: QAReview) => {
+        let formData = new FormData();
+        formData.append('id', review.id);
+        formData.append('job', review.job.toString());
+        formData.append('auditorName', review.auditorName);
+        formData.append('dateOfAudit', review.dateOfAudit!.toISOString());
+        formData.append('prodLine', review.prodLine);
+        formData.append('assembly', review.assembly);
+        formData.append('deviceSerialNumber', review.deviceSerialNumber);
+        formData.append('globalRework', String(review.globalRework));
+        formData.append('grNumber', review.grNumber);
+        formData.append('omsAvailable', String(review.omsAvailable));
+        formData.append('correctToolAvailableAndCalibrated', String(review.correctToolAvailableAndCalibrated));
+        formData.append('zebraTestUtilityAvailable', String(review.zebraTestUtilityAvailable));
+        formData.append('snAllTestsPass', String(review.snAllTestsPass));
+        formData.append('testUtilityUnitLabelBoxLabel', String(review.testUtilityUnitLabelBoxLabel));
+        formData.append('shift', review.shift);
+        formData.append('followedESDRequirement', String(review.followedESDRequirement));
+        formData.append('faiCompletedWithPass', String(review.faiCompletedWithPass));
+        formData.append('qualityOfLabel', String(review.qualityOfLabel));
+        formData.append('faiAndLAIEvidence', review.faiAndLAIEvidence);
+        formData.append('pictureOfUnitAndPODLabel', review.pictureOfUnitAndPODLabel);
+        formData.append('packingPicture', review.packingPicture);
+        formData.append('issueDocumented', String(review.issueDocumented));
+        formData.append('packingProcess', String(review.packingProcess));
+        formData.append('issueDescription', review.issueDescription);
+        formData.append('evidenceOfIssuesReported', review.evidenceOfIssuesReported);
+        formData.append('verificationStatus', review.verificationStatus);
+        return axios.post<void>('qa', formData, {
+            headers: { 'Content-type': 'multipart/form-data' }
+        })
+    },
+    update: (review: QAReview) => {
+        let formData = new FormData();
+        formData.append('id', review.id);
+        formData.append('job', review.job.toString());
+        formData.append('auditorName', review.auditorName);
+        formData.append('dateOfAudit', review.dateOfAudit!.toISOString());
+        formData.append('prodLine', review.prodLine);
+        formData.append('assembly', review.assembly);
+        formData.append('deviceSerialNumber', review.deviceSerialNumber);
+        formData.append('globalRework', String(review.globalRework));
+        formData.append('grNumber', review.grNumber);
+        formData.append('omsAvailable', String(review.omsAvailable));
+        formData.append('correctToolAvailableAndCalibrated', String(review.correctToolAvailableAndCalibrated));
+        formData.append('zebraTestUtilityAvailable', String(review.zebraTestUtilityAvailable));
+        formData.append('snAllTestsPass', String(review.snAllTestsPass));
+        formData.append('testUtilityUnitLabelBoxLabel', String(review.testUtilityUnitLabelBoxLabel));
+        formData.append('shift', review.shift);
+        formData.append('followedESDRequirement', String(review.followedESDRequirement));
+        formData.append('faiCompletedWithPass', String(review.faiCompletedWithPass));
+        formData.append('qualityOfLabel', String(review.qualityOfLabel));
+        formData.append('faiAndLAIEvidence', review.faiAndLAIEvidence);
+        formData.append('pictureOfUnitAndPODLabel', review.pictureOfUnitAndPODLabel);
+        formData.append('packingPicture', review.packingPicture);
+        formData.append('issueDocumented', String(review.issueDocumented));
+        formData.append('packingProcess', String(review.packingProcess));
+        formData.append('issueDescription', review.issueDescription);
+        formData.append('evidenceOfIssuesReported', review.evidenceOfIssuesReported);
+        formData.append('verificationStatus', review.verificationStatus);
+        return axios.put<void>(`qa/${review.id}`, formData, {
+            headers: { 'Content-type': 'multipart/form-data' }
+        })
+    },
+    details: (id: string) => requests.get<QAReview>(`qa/${id}`)
+}
+
 const Account = {
     current: () => requests.get<User>('account'),
     login: (user: UserLogin) => requests.post<User>('account/login', user),
@@ -100,7 +170,8 @@ const Account = {
 
 const agent = {
     WorkOrders,
-    Account
+    Account,
+    QA
 }
 
 export default agent;

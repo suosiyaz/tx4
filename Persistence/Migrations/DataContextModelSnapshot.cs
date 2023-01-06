@@ -105,6 +105,31 @@ namespace Persistence.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Domain.Attachment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AttachmentType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Path")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("QualityReviewId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ReviewId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QualityReviewId");
+
+                    b.ToTable("Attachments");
+                });
+
             modelBuilder.Entity("Domain.HotNews", b =>
                 {
                     b.Property<int>("Id")
@@ -130,6 +155,73 @@ namespace Persistence.Migrations
                     b.HasIndex("AuthorId");
 
                     b.ToTable("HotNewses");
+                });
+
+            modelBuilder.Entity("Domain.QualityReview", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AuditorName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("CorrectToolAvailableAndCalibrated")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("DateOfAudit")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeviceSerialNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("FAICompletedWithPass")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("FollowedESDRequirement")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("GRNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("GlobalRework")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("IssueDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IssueDocumented")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MyProperty")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("OMSAvailable")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("PackingProcess")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("QualityOfLabel")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("SNAllTestsPass")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Shift")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TestUtilityUnitLabelBoxLabel")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("VerificationStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ZebraTestUtilityAvailable")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("QualityReviews");
                 });
 
             modelBuilder.Entity("Domain.WorkOrder", b =>
@@ -158,6 +250,9 @@ namespace Persistence.Migrations
 
                     b.Property<DateTime?>("ExpectedCompletionDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Feedback")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HelpRequiredFrom")
                         .HasColumnType("nvarchar(max)");
@@ -192,6 +287,15 @@ namespace Persistence.Migrations
                     b.Property<string>("ProdLine")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("QACompletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("QualityStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ReadyForQuality")
+                        .HasColumnType("bit");
+
                     b.Property<string>("ReconfigurationStatus")
                         .HasColumnType("nvarchar(max)");
 
@@ -205,6 +309,9 @@ namespace Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Job")
+                        .IsUnique();
 
                     b.ToTable("WorkOrders");
                 });
@@ -372,6 +479,13 @@ namespace Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Domain.Attachment", b =>
+                {
+                    b.HasOne("Domain.QualityReview", null)
+                        .WithMany("Attachments")
+                        .HasForeignKey("QualityReviewId");
+                });
+
             modelBuilder.Entity("Domain.HotNews", b =>
                 {
                     b.HasOne("Domain.AppUser", "Author")
@@ -379,6 +493,17 @@ namespace Persistence.Migrations
                         .HasForeignKey("AuthorId");
 
                     b.Navigation("Author");
+                });
+
+            modelBuilder.Entity("Domain.QualityReview", b =>
+                {
+                    b.HasOne("Domain.WorkOrder", "WorkOrder")
+                        .WithOne("Review")
+                        .HasForeignKey("Domain.QualityReview", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("WorkOrder");
                 });
 
             modelBuilder.Entity("Domain.WorkOrderHistory", b =>
@@ -448,9 +573,16 @@ namespace Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Domain.QualityReview", b =>
+                {
+                    b.Navigation("Attachments");
+                });
+
             modelBuilder.Entity("Domain.WorkOrder", b =>
                 {
                     b.Navigation("History");
+
+                    b.Navigation("Review");
                 });
 #pragma warning restore 612, 618
         }

@@ -27,6 +27,10 @@ export interface WorkOrder {
     history: WorkOrderHistory[];
     orderProcessingLine: string;
     expectedCompletionDate: Date;
+    readyForQuality: boolean;
+    feedback: string;
+    qualityStatus: string;
+    qaCompletedDate: Date | undefined;
   }
 
   export class WorkOrder implements WorkOrder {

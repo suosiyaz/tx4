@@ -32,6 +32,7 @@ export default class WorkOrderStore {
 
     setPredicate = (predicate: string, value: string | Date) => {
         if (value !== '' && value !== null) this.predicate.set(predicate, value);
+        else this.predicate.delete(predicate);
     }
 
     resetParams = () => {
@@ -72,7 +73,6 @@ export default class WorkOrderStore {
         this.setLoadingInitial(true);
         this.workOrderRegistery.clear();
         try {
-            console.log(this.axiosParams);
             const result = await agent.WorkOrders.list(this.axiosParams);
             result.data.forEach(workOrder => {
                 this.setWorkOrder(workOrder);
@@ -220,7 +220,6 @@ export default class WorkOrderStore {
     }
 
     reconfigureWorkOrder = async (workOrder: WorkOrder) => {
-        console.log(workOrder);
         try {
             await agent.WorkOrders.reconfigure(workOrder);
             runInAction(() => {
@@ -234,7 +233,6 @@ export default class WorkOrderStore {
             console.log(error);
         }
     }
-
     releaseWorkOrder = async (workOrder: WorkOrderFormValues) => {
         workOrder.orderStatus = 'released';
         try {

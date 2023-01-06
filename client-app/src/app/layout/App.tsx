@@ -19,6 +19,8 @@ import UsersDashboard from '../../features/users/dashboard/UsersDashboard';
 import ZebraRoute from './ZebraRoute';
 import AdminRoute from './AdminRoute';
 import Help from '../../features/help/Help';
+import QA from '../../features/workOrders/qa/QA';
+import QAReviewForm from '../../features/workOrders/qa/QAReviewForm';
 
 function App() {
   const { commonStore, userStore } = useStore();
@@ -52,7 +54,8 @@ function App() {
                   <Switch>
                     <Route path='/dashboard' component={WorkOrderDashboard} />
                     <Route path='/openOrders' component={OpenWorkOrders} />
-                    <Route path='/qa' component={OpenWorkOrders} />
+                    <Route exact path='/qa' component={QA} />
+                    <Route path='/qa/:id' component={QAReviewForm} />
                     <Route path='/help' component={Help} />
                     <ZebraRoute path='/releaseOrder' component={WorkOrderForm} />
                     <AdminRoute path='/users' component={UsersDashboard} />

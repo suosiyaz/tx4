@@ -1,4 +1,5 @@
 using Application.HotNewses;
+using Application.QA;
 using Application.Users;
 using Application.WorkOrders;
 using AutoMapper;
@@ -11,9 +12,15 @@ namespace Application.Core
         public MappingProfiles()
         {
             CreateMap<WorkOrder, WorkOrder>();
+            CreateMap<WorkOrder, WorkOrderQADto>();
+            CreateMap<QualityReview, QADetailsDto>()
+                .ForMember(d => d.Job, o => o.MapFrom(s => s.WorkOrder.Job))
+                .ForMember(d => d.ProdLine, o => o.MapFrom(s => s.WorkOrder.ProdLine))
+                .ForMember(d => d.Assembly, o => o.MapFrom(s => s.WorkOrder.Assembly));
             CreateMap<UserCreateDto, AppUser>();
             CreateMap<UserUpdateDto, AppUser>();
             CreateMap<WorkOrderCreateDto, WorkOrder>();
+            CreateMap<QACreateDto, QualityReview>();
             CreateMap<WorkOrderReconfigureDto, WorkOrder>();
             CreateMap<WorkOrderHistory, WorkOrderHistoryDto>()
                 .ForMember(d => d.UserName, o => o.MapFrom(s => s.User.UserName))

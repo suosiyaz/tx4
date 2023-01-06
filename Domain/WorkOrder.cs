@@ -25,7 +25,12 @@ namespace Domain
         public string AdditionalComments { get; set; }
         public string OrderProcessingLine { get; set; }
         public DateTime? ExpectedCompletionDate { get; set; }
-        public ICollection<WorkOrderHistory> History { get; set; }        
+        public ICollection<WorkOrderHistory> History { get; set; } 
+        public QualityReview Review { get; set; }  
+        public bool ReadyForQuality { get; set; }
+        public string Feedback { get; set; }
+        public string QualityStatus { get; set; }
+        public DateTime? QACompletedDate { get; set; }
 
     }
 }
